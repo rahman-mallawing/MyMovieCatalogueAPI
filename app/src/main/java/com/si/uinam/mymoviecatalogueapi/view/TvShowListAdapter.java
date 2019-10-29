@@ -1,5 +1,6 @@
 package com.si.uinam.mymoviecatalogueapi.view;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class TvShowListAdapter extends RecyclerView.Adapter<TvShowListAdapter.TvShowViewHolder> {
 
-    private ArrayList<TvShowModel> tvShowList;
+    private ArrayList<TvShowModel> tvShowList = new ArrayList<>();
     private OnItemClickCallback itemClickCallback;
 
-    public void setTvShowList(ArrayList<TvShowModel> tvShowList) {
-        this.tvShowList = tvShowList;
+    public void setTvShowList(ArrayList<TvShowModel> tvShowCollection) {
+        tvShowList.clear();
+        tvShowList.addAll(tvShowCollection);
+        notifyDataSetChanged();
+        Log.d("TES-VIEW-MODEL-TV-SHOW", "Notifed adapter: " + tvShowCollection.size());
     }
 
     public void setItemClickCallback(OnItemClickCallback itemClickCallback) {

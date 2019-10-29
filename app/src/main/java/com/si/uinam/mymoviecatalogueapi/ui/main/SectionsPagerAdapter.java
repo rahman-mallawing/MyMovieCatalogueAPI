@@ -32,7 +32,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
         // return PlaceholderFragment.newInstance(position + 1);
-        return position == 0? MovieFragment.newInstance() : new TvShowFragment();
+        return position == 0? MovieFragment.newInstance() : TvShowFragment.newInstance();
     }
 
     @Nullable

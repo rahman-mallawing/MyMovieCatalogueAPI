@@ -1,11 +1,11 @@
 package com.si.uinam.mymoviecatalogueapi.viewmodel;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.si.uinam.mymoviecatalogueapi.helper.LocaleHelper;
-import com.si.uinam.mymoviecatalogueapi.model.Buku;
 import com.si.uinam.mymoviecatalogueapi.model.MovieModel;
 
 import org.json.JSONArray;
@@ -29,12 +29,12 @@ public class MovieViewModel extends ViewModel {
     private String listType = "popular";
     private MutableLiveData<ArrayList<MovieModel>> movieCollection = new MutableLiveData<>();
 
-    public void loadMovieList(){
+    public void loadMovieList(Context context){
         Log.d("TES-VIEW-MODEL", "2. Load Connect internet API");
         AsyncHttpClient client = new AsyncHttpClient();
         //final ArrayList<MovieModel> listItems = new ArrayList<>();
         //2f766223589e24c61b0aecdf89ec841d&language=en-US&page=1
-        String url = "https://api.themoviedb.org/3/movie/" + getListType() + "?api_key=" + API_KEY + "&language=" + getLangId() + "&page=1";
+        String url = "https://api.themoviedb.org/3/movie/" + getListType() + "?api_key=" + API_KEY + "&language=" + getLangId(context) + "&page=1";
 
         client.get(url, new AsyncHttpResponseHandler() {
             @Override
@@ -42,7 +42,6 @@ public class MovieViewModel extends ViewModel {
                 Log.d("TES-VIEW-MODEL", "3. SUCCESS Connect internet API");
                 try {
                     ArrayList<MovieModel> listItems = new ArrayList<>();
-                    ArrayList<Buku> b = new ArrayList<>();
                     sleep(1000);
                     Log.d("TES-VIEW-MODEL", "4. AFTER SLEEP");
                     String result = new String(responseBody);
@@ -63,7 +62,6 @@ public class MovieViewModel extends ViewModel {
                         //movieModel.setGenre_ids(movieJson.getJSONArray("genre_ids"));
                         movieModel.setTitle(movieJson.getString("title"));
                         Log.d("TES-VIEW-MODEL-TITLE", movieJson.getString("title"));
-                        b.add(new Buku(movieJson.getString("title")));
                         movieModel.setVote_average(movieJson.getDouble("vote_average"));
                         movieModel.setOverview(movieJson.getString("overview"));
                         movieModel.setRelease_date(Date.valueOf(movieJson.getString("release_date")));
@@ -96,9 +94,11 @@ public class MovieViewModel extends ViewModel {
         return listType;
     }
 
-    private String getLangId() {
-        //String localeId = LocaleHelper.getLocale(context);
-        //if(localeId.equals("in")){
+    private String getLangId(Context context) {
+        String localeId = LocaleHelper.getLocale(context);
+        if(localeId.equals("in")){
+            return "id-ID";
+        }
         return langId;
     }
 

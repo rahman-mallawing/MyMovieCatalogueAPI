@@ -17,9 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.si.uinam.mymoviecatalogueapi.R;
-import com.si.uinam.mymoviecatalogueapi.model.Buku;
 import com.si.uinam.mymoviecatalogueapi.model.MovieModel;
 import com.si.uinam.mymoviecatalogueapi.viewmodel.MovieViewModel;
 
@@ -83,14 +83,16 @@ public class MovieFragment extends Fragment {
         Log.d("TES-VIEW-MODEL", "1. assdd Connect internet API");
         rcvMovies.setLayoutManager(new LinearLayoutManager(getContext()));
         movieListAdapter = new MovieListAdapter();
+        movieListAdapter.setItemClickCallback(new MovieListAdapter.OnItemClickCallback() {
+            @Override
+            public void onItemClicked(MovieModel movie) {
+                Toast.makeText(getContext(), "Kamu memilih: " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+            }
+        });
         movieListAdapter.notifyDataSetChanged();
         rcvMovies.setAdapter(movieListAdapter);
         showLoading(true);
-        //viewModel = ViewModelProviders.of(this.getActivity()).get(PlayerViewModel.class);
-        //movieViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(MovieViewModel.class);
-        //movieViewModel.loadMovieList();
-        //movieViewModel = ViewModelProviders.of(this)).get(MovieViewModel.class);
-        movieViewModel.loadMovieList();
+       movieViewModel.loadMovieList(getContext());
 
         return view;
     }

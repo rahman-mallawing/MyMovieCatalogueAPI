@@ -1,5 +1,6 @@
 package com.si.uinam.mymoviecatalogueapi.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class TvShowModel {
@@ -9,10 +10,27 @@ public class TvShowModel {
     private int id;
     private String backdrop_path;
     private String original_language;
-    private String[] origin_country;
+    private ArrayList<String> origin_country;
     private String original_name;
-    private int[] genre_ids;
+    private ArrayList<Integer> genre_ids;
     private String name;
+
+    public ArrayList<String> getOrigin_country() {
+        return origin_country;
+    }
+
+    public void setOrigin_country(ArrayList<String> origin_country) {
+        this.origin_country = origin_country;
+    }
+
+    public ArrayList<Integer> getGenre_ids() {
+        return genre_ids;
+    }
+
+    public void setGenre_ids(ArrayList<Integer> genre_ids) {
+        this.genre_ids = genre_ids;
+    }
+
     private double vote_average;
     private String overview;
     private Date first_air_date;

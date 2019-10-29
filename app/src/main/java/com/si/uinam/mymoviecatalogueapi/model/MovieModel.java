@@ -1,5 +1,6 @@
 package com.si.uinam.mymoviecatalogueapi.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MovieModel {
@@ -12,7 +13,16 @@ public class MovieModel {
     private String backdrop_path;
     private String original_language;
     private String original_title;
-    //private int[] genre_ids;
+    private ArrayList<Integer> genre_ids;
+
+    public ArrayList<Integer> getGenre_ids() {
+        return genre_ids;
+    }
+
+    public void setGenre_ids(ArrayList<Integer> genre_ids) {
+        this.genre_ids = genre_ids;
+    }
+
     private String title;
     private double vote_average;
     private String overview;
