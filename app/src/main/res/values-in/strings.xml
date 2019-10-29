@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Katalog Film Dengan API</string>
+    <string name="tab_text_1">Film</string>
+    <string name="tab_text_2">Acara TV</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Halo Kosong Feragment</string>
+    <string name="locale_setting">Seting Lokal</string>
+    <string name="indonesia">Bahasa Indonesia</string>
+    <string name="english">Bahasa Inggris</string>
+    <string name="change_language">Ganti Bahasa</string>
+    <string name="movie_title_sample">Judul Movie Populer</string>
+</resources>
