@@ -17,6 +17,7 @@
     <string name="cast_desc_sample">Desc Sample 3</string>
     <string name="crew3_desc_sample">Crew Desc Sample 3</string>
     <string name="crew2_desc_sample">Desc Sample 3</string>
-    <string name="user_score">8.0</string>
+    <string name="user_score">Skor</string>
     <string name="poster_text_sample">poster_text_sample</string>
+    <string name="crew3_sample">Desc Sample 3</string>
 </resources>

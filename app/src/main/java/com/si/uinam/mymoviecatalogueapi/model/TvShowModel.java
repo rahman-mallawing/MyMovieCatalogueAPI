@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class TvShowModel {
-    private double popularity;
-    private double vote_count;
-    private String poster_path;
-    private int id;
-    private String backdrop_path;
-    private String original_language;
-    private ArrayList<String> origin_country;
-    private String original_name;
-    private ArrayList<Integer> genre_ids;
-    private String name;
+    protected double popularity;
+    protected double vote_count;
+    protected String poster_path;
+    protected int id;
+    protected String backdrop_path;
+    protected String original_language;
+    protected ArrayList<String> origin_country;
+    protected String original_name;
+    protected ArrayList<Integer> genre_ids;
+    protected String name;
+    protected double vote_average;
+    protected String overview;
+    protected Date first_air_date;
 
     public ArrayList<String> getOrigin_country() {
         return origin_country;
@@ -30,10 +33,6 @@ public class TvShowModel {
     public void setGenre_ids(ArrayList<Integer> genre_ids) {
         this.genre_ids = genre_ids;
     }
-
-    private double vote_average;
-    private String overview;
-    private Date first_air_date;
 
     public double getPopularity() {
         return popularity;

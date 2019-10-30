@@ -56,7 +56,7 @@ public class MovieFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<MovieModel> collection) {
                 Log.d("TES-VIEW-MODEL", "1212. Live collection adalah: " + collection.size());
-                Log.d("TES-VIEW-MODEL", "1212. Live collection adalah: " + collection.get(0).getPoster_path());
+                //Log.d("TES-VIEW-MODEL", "1212. Live collection adalah: " + collection.get(0).getPoster_path());
                 if(collection != null){
                     movieListAdapter.setMovieList(collection);
                     Log.d("TES-VIEW-MODEL", "8. Inside observer setMovieList: " + collection.size());

@@ -32,6 +32,10 @@ public class MovieDetailModel extends MovieModel{
         this.setRelease_date(movieModel.getRelease_date());
     }
 
+    public String getPoster_path(){
+        return this.poster_path;
+    }
+
     public ArrayList<Cast> getCasts() {
         return casts;
     }
@@ -49,7 +53,7 @@ public class MovieDetailModel extends MovieModel{
     }
 
     public Review getReview() {
-        return review;
+        return review != null? review : new Review();
     }
 
     public void setReview(Review review) {
@@ -172,7 +176,7 @@ public class MovieDetailModel extends MovieModel{
         }
 
         public String getProfile_path() {
-            return profile_path;
+            return "https://image.tmdb.org/t/p/w500" + profile_path;
         }
 
         public void setProfile_path(String profile_path) {
@@ -239,7 +243,7 @@ public class MovieDetailModel extends MovieModel{
         }
 
         public String getProfile_path() {
-            return profile_path;
+            return "https://image.tmdb.org/t/p/w500" + profile_path;
         }
 
         public void setProfile_path(String profile_path) {

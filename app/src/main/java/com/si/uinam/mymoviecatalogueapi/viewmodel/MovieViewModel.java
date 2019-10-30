@@ -32,7 +32,7 @@ public class MovieViewModel extends ViewModel {
     public void loadMovieList(Context context){
         Log.d("TES-VIEW-MODEL", "2. Load Connect internet API");
         AsyncHttpClient client = new AsyncHttpClient();
-        //final ArrayList<MovieModel> listItems = new ArrayList<>();
+        final ArrayList<MovieModel> listItems = new ArrayList<>();
         //2f766223589e24c61b0aecdf89ec841d&language=en-US&page=1
         String url = "https://api.themoviedb.org/3/movie/" + getListType() + "?api_key=" + API_KEY + "&language=" + getLangId(context) + "&page=1";
 
@@ -41,8 +41,9 @@ public class MovieViewModel extends ViewModel {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Log.d("TES-VIEW-MODEL", "3. SUCCESS Connect internet API");
                 try {
-                    ArrayList<MovieModel> listItems = new ArrayList<>();
-                    sleep(9000);
+                    //ArrayList<MovieModel> listItems = new ArrayList<>();
+
+                    sleep(19000);
                     Log.d("TES-VIEW-MODEL", "4. AFTER SLEEP");
                     String result = new String(responseBody);
                     JSONObject responseObject = new JSONObject(result);
@@ -62,7 +63,7 @@ public class MovieViewModel extends ViewModel {
 
                         ArrayList<Integer> listGenreId = new ArrayList<Integer>();
                         JSONArray jsonArrayGenre = movieJson.getJSONArray("genre_ids");
-                        if (jsonArrayGenre != null) {
+                        if (jsonArrayGenre != null && jsonArrayGenre.length() > 0) {
                             int lenGenre = jsonArrayGenre.length();
                             for (int l=0;l<lenGenre;l++){
                                 listGenreId.add(jsonArrayGenre.getInt(l));
@@ -79,9 +80,9 @@ public class MovieViewModel extends ViewModel {
                     }
                     //Log.d("TES-VIEW-MODEL", "50. sebelum set or post: " + listItems.size());
 
-                    movieCollection.postValue(listItems);
+                    //movieCollection.postValue(listItems);
 
-                    //movieList.setValue(listItems);
+                    movieCollection.setValue(listItems);
 
                     Log.d("TES-VIEW-MODEL", "5. Inside view model setMovieList: " + listItems.size());
                     //Log.d("TES-VIEW-MODEL", "5a. Inside view model setMovieList: " + movieList.getValue().toString());

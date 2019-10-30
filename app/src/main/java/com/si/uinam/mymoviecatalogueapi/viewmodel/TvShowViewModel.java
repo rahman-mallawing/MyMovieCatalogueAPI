@@ -50,7 +50,7 @@ public class TvShowViewModel extends ViewModel {
 
                         ArrayList<Integer> listGenreId = new ArrayList<Integer>();
                         JSONArray jsonArrayGenre = tvShowJson.getJSONArray("genre_ids");
-                        if (jsonArrayGenre != null) {
+                        if (jsonArrayGenre != null && jsonArrayGenre.length() > 0) {
                             int lenGenre = jsonArrayGenre.length();
                             for (int l=0;l<lenGenre;l++){
                                 listGenreId.add(jsonArrayGenre.getInt(l));
@@ -63,7 +63,7 @@ public class TvShowViewModel extends ViewModel {
 
                         ArrayList<String> listCountry = new ArrayList<String>();
                         JSONArray jsonArrayCountry = tvShowJson.getJSONArray("origin_country");
-                        if (jsonArrayCountry != null) {
+                        if (jsonArrayCountry != null && jsonArrayCountry.length() > 0) {
                             int len = jsonArrayCountry.length();
                             for (int k=0;k<len;k++){
                                 listCountry.add(jsonArrayCountry.getString(k));

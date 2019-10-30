@@ -10,6 +10,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/mDetailProgressBar"
+            style="@android:style/Widget.ProgressBar.Inverse"
+            android:gravity="center"
+            android:elevation="10dp"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/img_poster"
             android:layout_width="160dp"
@@ -317,7 +330,7 @@
             app:layout_constraintTop_toBottomOf="@id/txv_review_written_on"
             android:textAlignment="viewStart"
             android:textSize="12sp"
-            tools:text="@tools:sample/lorem/random"/>
+            tools:text="@tools:sample/lorem"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

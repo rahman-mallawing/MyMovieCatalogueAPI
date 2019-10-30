@@ -7,16 +7,20 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class MovieModel implements Parcelable {
-    private double popularity;
-    private double vote_count;
-    private boolean video;
-    private String poster_path;
-    private int id;
-    private boolean  adult;
-    private String backdrop_path;
-    private String original_language;
-    private String original_title;
-    private ArrayList<Integer> genre_ids;
+    protected double popularity;
+    protected double vote_count;
+    protected boolean video;
+    protected String poster_path;
+    protected int id;
+    protected boolean  adult;
+    protected String backdrop_path;
+    protected String original_language;
+    protected String original_title;
+    protected ArrayList<Integer> genre_ids;
+    protected String title;
+    protected double vote_average;
+    protected String overview;
+    protected Date release_date;
 
     public ArrayList<Integer> getGenre_ids() {
         return genre_ids;
@@ -25,11 +29,6 @@ public class MovieModel implements Parcelable {
     public void setGenre_ids(ArrayList<Integer> genre_ids) {
         this.genre_ids = genre_ids;
     }
-
-    private String title;
-    private double vote_average;
-    private String overview;
-    private Date release_date;
 
     public double getPopularity() {
         return popularity;
