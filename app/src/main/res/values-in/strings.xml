@@ -11,4 +11,12 @@
     <string name="english">Bahasa Inggris</string>
     <string name="change_language">Ganti Bahasa</string>
     <string name="movie_title_sample">Judul Movie Populer</string>
+    <string name="review">Review</string>
+    <string name="genre">GENRE</string>
+    <string name="overview">OVERVIEW</string>
+    <string name="cast_desc_sample">Desc Sample 3</string>
+    <string name="crew3_desc_sample">Crew Desc Sample 3</string>
+    <string name="crew2_desc_sample">Desc Sample 3</string>
+    <string name="user_score">8.0</string>
+    <string name="poster_text_sample">poster_text_sample</string>
 </resources>

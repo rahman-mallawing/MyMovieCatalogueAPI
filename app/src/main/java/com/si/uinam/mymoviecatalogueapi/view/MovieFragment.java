@@ -1,6 +1,7 @@
 package com.si.uinam.mymoviecatalogueapi.view;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -87,6 +88,9 @@ public class MovieFragment extends Fragment {
             @Override
             public void onItemClicked(MovieModel movie) {
                 Toast.makeText(getContext(), "Kamu memilih: " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+                Intent detailIntent = new Intent(getActivity(), MovieDetailActivity.class);
+                detailIntent.putExtra(MovieDetailActivity.EXTRA_WATCHABLE, movie);
+                startActivity(detailIntent);
             }
         });
         movieListAdapter.notifyDataSetChanged();

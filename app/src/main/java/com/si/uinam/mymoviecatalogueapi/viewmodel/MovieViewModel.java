@@ -42,7 +42,7 @@ public class MovieViewModel extends ViewModel {
                 Log.d("TES-VIEW-MODEL", "3. SUCCESS Connect internet API");
                 try {
                     ArrayList<MovieModel> listItems = new ArrayList<>();
-                    sleep(1000);
+                    sleep(9000);
                     Log.d("TES-VIEW-MODEL", "4. AFTER SLEEP");
                     String result = new String(responseBody);
                     JSONObject responseObject = new JSONObject(result);
@@ -59,7 +59,17 @@ public class MovieViewModel extends ViewModel {
                         movieModel.setBackdrop_path(movieJson.getString("backdrop_path"));
                         movieModel.setOriginal_language(movieJson.getString("original_language"));
                         movieModel.setOriginal_title(movieJson.getString("original_title"));
-                        //movieModel.setGenre_ids(movieJson.getJSONArray("genre_ids"));
+
+                        ArrayList<Integer> listGenreId = new ArrayList<Integer>();
+                        JSONArray jsonArrayGenre = movieJson.getJSONArray("genre_ids");
+                        if (jsonArrayGenre != null) {
+                            int lenGenre = jsonArrayGenre.length();
+                            for (int l=0;l<lenGenre;l++){
+                                listGenreId.add(jsonArrayGenre.getInt(l));
+                            }
+                        }
+                        movieModel.setGenre_ids(listGenreId);
+
                         movieModel.setTitle(movieJson.getString("title"));
                         Log.d("TES-VIEW-MODEL-TITLE", movieJson.getString("title"));
                         movieModel.setVote_average(movieJson.getDouble("vote_average"));
