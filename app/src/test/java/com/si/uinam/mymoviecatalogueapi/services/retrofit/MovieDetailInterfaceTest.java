@@ -12,7 +12,7 @@ import retrofit2.Response;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
-public class MovieDetailServiceTest {
+public class MovieDetailInterfaceTest {
 
     Log log;
 
@@ -30,11 +30,14 @@ public class MovieDetailServiceTest {
     @Test
     public void getMovieDetail() {
 
+        int id = 558;
+        String API_KEY = "2f766223589e24c61b0aecdf89ec841d";
+        String language = "en-US";
         //Log.d("RETROFIT-TEST", "movieDetail.title");
         System.out.println("movieDetail.title");
-        MovieDetailService mdServ = RetrofitClientInstance.getRetrofitInstance()
-                .create(MovieDetailService.class);
-        Call<MovieDetail> call = mdServ.getMovieDetail();
+        MovieDetailInterface mdServ = RetrofitClientInstance.getRetrofitInstance()
+                .create(MovieDetailInterface.class);
+        Call<MovieDetail> call = mdServ.getMovieDetail(id, API_KEY, language);
         call.enqueue(new Callback<MovieDetail>() {
             @Override
             public void onResponse(Call<MovieDetail> call, Response<MovieDetail> response) {
