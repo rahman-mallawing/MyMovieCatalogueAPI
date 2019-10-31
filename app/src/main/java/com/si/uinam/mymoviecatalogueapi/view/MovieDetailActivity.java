@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.si.uinam.mymoviecatalogueapi.R;
+import com.si.uinam.mymoviecatalogueapi.helper.ApiHelper;
+import com.si.uinam.mymoviecatalogueapi.helper.LocaleHelper;
 import com.si.uinam.mymoviecatalogueapi.model.MovieDetailModel;
 import com.si.uinam.mymoviecatalogueapi.model.MovieModel;
 import com.si.uinam.mymoviecatalogueapi.viewmodel.MovieDetailViewModel;
@@ -82,7 +84,9 @@ public class MovieDetailActivity extends AppCompatActivity {
             }
         });
 
-        movieDetailViewModel.loadMovieDetail(this, movieModel);
+        String localeId = LocaleHelper.getLocale(this);
+        movieDetailViewModel.loadMovieDetail(movieModel,
+                ApiHelper.getLanguageId(localeId));
         showLoading(true);
     }
 
@@ -101,12 +105,15 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     public void displayMovieDetail(MovieDetailModel movieDetailModel) {
-
+        Log.d("TES-MOVIE-ID", "ID: "+ movieDetailModel.getId());
         MovieDetailModel.Cast castDefault = movieDetailModel.new Cast();
         MovieDetailModel.Crew crewDefault = movieDetailModel.new Crew();
         MovieDetailModel.Review review = movieDetailModel.getReview();
         ArrayList<MovieDetailModel.Cast> casts = movieDetailModel.getCasts();
         ArrayList<MovieDetailModel.Crew> crews = movieDetailModel.getCrews();
+
+        //Log.d("TES-MOVIE-CAST", "ID: "+ casts.toString());
+        //Log.d("TES-MOVIE-CREW", "ID: "+ crews.toString());
 
         MovieDetailModel.Cast cast1 = casts.size() >= 0? casts.get(0) : castDefault;
         MovieDetailModel.Cast cast2 = casts.size() >= 1? casts.get(1) : castDefault;

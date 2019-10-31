@@ -43,7 +43,7 @@ public class MovieViewModel extends ViewModel {
                 try {
                     //ArrayList<MovieModel> listItems = new ArrayList<>();
 
-                    sleep(19000);
+                    sleep(100);
                     Log.d("TES-VIEW-MODEL", "4. AFTER SLEEP");
                     String result = new String(responseBody);
                     JSONObject responseObject = new JSONObject(result);
