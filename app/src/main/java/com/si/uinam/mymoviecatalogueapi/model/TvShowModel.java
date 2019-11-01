@@ -1,9 +1,12 @@
 package com.si.uinam.mymoviecatalogueapi.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Date;
 
-public class TvShowModel {
+public class TvShowModel implements Parcelable {
     protected double popularity;
     protected double vote_count;
     protected String poster_path;
@@ -121,4 +124,60 @@ public class TvShowModel {
     public void setFirst_air_date(Date first_air_date) {
         this.first_air_date = first_air_date;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(this.popularity);
+        dest.writeDouble(this.vote_count);
+        dest.writeString(this.poster_path);
+        dest.writeInt(this.id);
+        dest.writeString(this.backdrop_path);
+        dest.writeString(this.original_language);
+        dest.writeStringList(this.origin_country);
+        dest.writeString(this.original_name);
+        dest.writeList(this.genre_ids);
+        dest.writeString(this.name);
+        dest.writeDouble(this.vote_average);
+        dest.writeString(this.overview);
+        dest.writeLong(this.first_air_date != null ? this.first_air_date.getTime() : -1);
+    }
+
+    public TvShowModel() {
+    }
+
+    protected TvShowModel(Parcel in) {
+        this.popularity = in.readDouble();
+        this.vote_count = in.readDouble();
+        this.poster_path = in.readString();
+        this.id = in.readInt();
+        this.backdrop_path = in.readString();
+        this.original_language = in.readString();
+        this.origin_country = in.createStringArrayList();
+        this.original_name = in.readString();
+        this.genre_ids = new ArrayList<Integer>();
+        in.readList(this.genre_ids, Integer.class.getClassLoader());
+        this.name = in.readString();
+        this.vote_average = in.readDouble();
+        this.overview = in.readString();
+        long tmpFirst_air_date = in.readLong();
+        this.first_air_date = tmpFirst_air_date == -1 ? null : new Date(tmpFirst_air_date);
+    }
+
+    public static final Parcelable.Creator<TvShowModel> CREATOR = new Parcelable.Creator<TvShowModel>() {
+        @Override
+        public TvShowModel createFromParcel(Parcel source) {
+            return new TvShowModel(source);
+        }
+
+        @Override
+        public TvShowModel[] newArray(int size) {
+            return new TvShowModel[size];
+        }
+    };
 }

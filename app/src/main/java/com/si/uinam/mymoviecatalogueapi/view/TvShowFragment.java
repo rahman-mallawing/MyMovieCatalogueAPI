@@ -1,6 +1,7 @@
 package com.si.uinam.mymoviecatalogueapi.view;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -80,6 +81,9 @@ public class TvShowFragment extends Fragment {
             @Override
             public void onItemClicked(TvShowModel tvShow) {
                 Toast.makeText(getContext(), "Kamu memilih: " + tvShow.getName(), Toast.LENGTH_SHORT).show();
+                Intent detailIntent = new Intent(getActivity(), TvShowDetailActivity.class);
+                detailIntent.putExtra(TvShowDetailActivity.EXTRA_TV_SHOW, tvShow);
+                startActivity(detailIntent);
             }
         });
         tvShowListAdapter.notifyDataSetChanged();

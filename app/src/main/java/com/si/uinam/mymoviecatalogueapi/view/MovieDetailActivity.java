@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
-    public static final String EXTRA_WATCHABLE = "extra_watchable";
+    public static final String EXTRA_MOVIE = "extra_movie";
     private TextView txvTittle, txvTittleDesc, txvCrew1, txvCrew2, txvCrew3,
             txvCrew1Desc, txvCrew2Desc, txvCrew3Desc, txvCast1, txvCast2,
             txvCast3, txvOverview, txvOverviewDesc, txvGenre, txvGenreDesc,
@@ -75,7 +75,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setIndeterminate(true);
 
-        MovieModel movieModel = getIntent().getParcelableExtra(MovieDetailActivity.EXTRA_WATCHABLE);
+        MovieModel movieModel = getIntent().getParcelableExtra(MovieDetailActivity.EXTRA_MOVIE);
 
 
         movieDetailViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(MovieDetailViewModel.class);

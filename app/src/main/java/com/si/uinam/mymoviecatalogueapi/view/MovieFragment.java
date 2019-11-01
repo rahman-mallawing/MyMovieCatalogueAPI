@@ -89,7 +89,7 @@ public class MovieFragment extends Fragment {
             public void onItemClicked(MovieModel movie) {
                 Toast.makeText(getContext(), "Kamu memilih: " + movie.getTitle(), Toast.LENGTH_SHORT).show();
                 Intent detailIntent = new Intent(getActivity(), MovieDetailActivity.class);
-                detailIntent.putExtra(MovieDetailActivity.EXTRA_WATCHABLE, movie);
+                detailIntent.putExtra(MovieDetailActivity.EXTRA_MOVIE, movie);
                 startActivity(detailIntent);
             }
         });
