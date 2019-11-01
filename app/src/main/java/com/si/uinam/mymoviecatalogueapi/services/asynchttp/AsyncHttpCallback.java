@@ -1,8 +1,7 @@
-package com.si.uinam.mymoviecatalogueapi.services.asynctask;
+package com.si.uinam.mymoviecatalogueapi.services.asynchttp;
 
 import com.si.uinam.mymoviecatalogueapi.model.MovieDetailModel;
 
-public interface AsyncTaskCallback {
-    void onPreExecute();
+public interface AsyncHttpCallback {
     void onPostExecute(MovieDetailModel movieDetailModel);
 }

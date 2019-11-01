@@ -10,6 +10,10 @@ import java.util.ArrayList;
 
 public class ApiHelper {
 
+    private static final String BASE_URL = "https://api.themoviedb.org";
+    private static final String IMG_BASE_URL = "https://image.tmdb.org/t/p/w500";
+    private static final String IMG_POSTER_PLACEHOLDER = "https://via.placeholder.com/500x750.jpg";
+    private static final String IMG_CAST_PLACEHOLDER = "https://via.placeholder.com/276x350.jpg";
     private static final String API_KEY = "2f766223589e24c61b0aecdf89ec841d";
     private static final String ENGLISH_LANGUAGE_ID = "en-US";
     private static final String INDONESIAN_LANGUAGE_ID = "id-ID";
@@ -18,6 +22,22 @@ public class ApiHelper {
     private static final String POPULAR_LIST_TYPE = "popular";
     private static final String UPCOMING_LIST_TYPE = "upcoming";
     private static final String NOW_PLAYING_LIST_TYPE = "now_playing";
+
+    public static String getImgPosterPlaceholder() {
+        return IMG_POSTER_PLACEHOLDER;
+    }
+
+    public static String getImgCastPlaceholder() {
+        return IMG_CAST_PLACEHOLDER;
+    }
+
+    public static String getBaseUrl() {
+        return BASE_URL;
+    }
+
+    public static String getImgBaseUrl() {
+        return IMG_BASE_URL;
+    }
 
     public static String getApiKey() {
         return API_KEY;
@@ -48,10 +68,4 @@ public class ApiHelper {
                 ENGLISH_LANGUAGE_ID;
     }
 
-    public static MovieDetailModel mapMovieDetailToMovieDetailModel(MovieModel movieModel, MovieDetail movieDetail, MovieCredit movieCredit, MovieReview movieReview) {
-        MovieDetailModel mdm = new MovieDetailModel(movieModel);
-        //ArrayList<Mo>
-        //mdm.setCasts(movieCredit.getCasts());
-        return mdm;
-    }
 }

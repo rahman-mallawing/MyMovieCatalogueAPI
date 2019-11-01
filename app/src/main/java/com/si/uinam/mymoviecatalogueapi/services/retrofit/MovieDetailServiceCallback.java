@@ -3,5 +3,5 @@ package com.si.uinam.mymoviecatalogueapi.services.retrofit;
 import com.si.uinam.mymoviecatalogueapi.model.MovieDetailModel;
 
 public interface MovieDetailServiceCallback {
-    void onPostExecute(MovieDetail movieDetail, MovieCredit movieCredit, MovieReview movieReview);
+    void onPostExecute(MovieDetailModel movieDetailModel);
 }

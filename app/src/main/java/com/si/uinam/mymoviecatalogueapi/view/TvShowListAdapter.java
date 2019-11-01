@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.si.uinam.mymoviecatalogueapi.R;
+import com.si.uinam.mymoviecatalogueapi.helper.ApiHelper;
 import com.si.uinam.mymoviecatalogueapi.model.TvShowModel;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class TvShowListAdapter extends RecyclerView.Adapter<TvShowListAdapter.Tv
 
         public void bind(TvShowModel tvShowModel){
             Glide.with(itemView.getContext())
-                    .load(tvShowModel.getPoster_path())
+                    .load(ApiHelper.getImgBaseUrl() + tvShowModel.getPoster_path())
                     .apply(new RequestOptions().override(100, 150))
                     .into(imgPoster);
             txvTitle.setText(tvShowModel.getName());

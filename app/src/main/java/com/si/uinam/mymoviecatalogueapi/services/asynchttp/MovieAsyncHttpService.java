@@ -1,6 +1,5 @@
-package com.si.uinam.mymoviecatalogueapi.services.asynctask;
+package com.si.uinam.mymoviecatalogueapi.services.asynchttp;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -19,72 +18,52 @@ import java.util.Objects;
 import cz.msebera.android.httpclient.Header;
 import static java.lang.Thread.sleep;
 
-public class MovieAsyncTaskService extends AsyncTask<MovieAsyncTaskService.InputOption, Integer, MovieDetailModel> {
+public class MovieAsyncHttpService {
 
     private static String API_KEY = ApiHelper.getApiKey();
     private static String CREDIT_LIST_TYPE = ApiHelper.getCreditListType();
     private static String REVIEW_LIST_TYPE = ApiHelper.getReviewListType();
-    private WeakReference<AsyncTaskCallback> asyncTaskCallback;
-    private InputOption inputOption;
+    private WeakReference<AsyncHttpCallback> asyncTaskCallback;
+    private MovieModel movieModel;
+    private String langId;
 
-    public static MovieAsyncTaskService create(AsyncTaskCallback asyncTaskCallback) {
-        return new MovieAsyncTaskService(asyncTaskCallback);
+    public static MovieAsyncHttpService create(AsyncHttpCallback asyncHttpCallback) {
+        return new MovieAsyncHttpService(asyncHttpCallback);
     }
 
-    public MovieAsyncTaskService setInputOption(MovieModel mModel, String langId) {
-        this.setInputOption(new InputOption(mModel, langId));
+    public MovieAsyncHttpService setInputOption(MovieModel mModel, String languageId) {
+        this.movieModel = mModel;
+        this.langId = languageId;
         return this;
     }
 
     public void executeService() {
-        this.execute(this.inputOption);
+        this.execute(this.movieModel, this.langId);
     }
 
-    private void setInputOption(InputOption inputOption) {
-        this.inputOption = inputOption;
+    private MovieAsyncHttpService(AsyncHttpCallback asyncHttpCallback) {
+        this.asyncTaskCallback = new WeakReference<>(asyncHttpCallback);
     }
 
-    private MovieAsyncTaskService(AsyncTaskCallback asyncTaskCallback) {
-        this.asyncTaskCallback = new WeakReference<>(asyncTaskCallback);
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        Log.i("ASYN_TAG", "onPreExecute inside DemoAsynch class");
-        AsyncTaskCallback myListener = this.asyncTaskCallback.get();
-        if(myListener != null){
-            myListener.onPreExecute();
-        }
-    }
-
-    @Override
-    protected MovieDetailModel doInBackground(InputOption... inputOptions) {
+    private void execute(MovieModel movieModel, String languageId) {
 
         //credit https://api.themoviedb.org/3/movie/475557/credits?api_key=2f766223589e24c61b0aecdf89ec841d
         // review https://api.themoviedb.org/3/movie/475557/reviews?api_key=2f766223589e24c61b0aecdf89ec841d&language=en-US&page=1
         // detail https://api.themoviedb.org/3/movie/558?api_key=2f766223589e24c61b0aecdf89ec841d&language=en-US
         AsyncHttpClient client = new AsyncHttpClient();
-        InputOption inputOption = inputOptions[0];
-        MovieModel movieModel = inputOption.getMovieModel();
 
         final MovieDetailModel movieDetailModel = new MovieDetailModel(movieModel);
-        String urlDetail = "https://api.themoviedb.org/3/movie/" + movieModel.getId() + "?api_key=" + API_KEY + "&language=" + inputOption.getLangId();
+        String urlDetail = "https://api.themoviedb.org/3/movie/" + movieModel.getId() + "?api_key=" + API_KEY + "&language=" + languageId;
         String urlCredit = "https://api.themoviedb.org/3/movie/" + movieModel.getId() + "/" + CREDIT_LIST_TYPE + "?api_key=" + API_KEY;
-        String urlReview = "https://api.themoviedb.org/3/movie/" + movieModel.getId() + "/" + REVIEW_LIST_TYPE + "?api_key=" + API_KEY + "&language=" + inputOption.getLangId() + "&page=1";
+        String urlReview = "https://api.themoviedb.org/3/movie/" + movieModel.getId() + "/" + REVIEW_LIST_TYPE + "?api_key=" + API_KEY + "&language=" + languageId + "&page=1";
 
         client.get(urlDetail, new AsyncHttpResponseHandler() {
-
-            @Override
-            public boolean getUseSynchronousMode() {
-                return false;
-            }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
 
-                    sleep(9100);
+                    sleep(100);
                     Log.d("TES-MOVIE-DETAIL", "4. AFTER SLEEP");
                     String result = new String(responseBody);
                     JSONObject responseObject = new JSONObject(result);
@@ -120,14 +99,9 @@ public class MovieAsyncTaskService extends AsyncTask<MovieAsyncTaskService.Input
         client.get(urlCredit, new AsyncHttpResponseHandler() {
 
             @Override
-            public boolean getUseSynchronousMode() {
-                return false;
-            }
-
-            @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-                    sleep(100);
+                    sleep(200);
                     Log.d("CREDIT-MOVIE-DETAIL", "4. AFTER SLEEP");
                     ArrayList<MovieDetailModel.Cast> castArrayList = new ArrayList<>();
                     String result = new String(responseBody);
@@ -185,15 +159,10 @@ public class MovieAsyncTaskService extends AsyncTask<MovieAsyncTaskService.Input
         client.get(urlReview, new AsyncHttpResponseHandler() {
 
             @Override
-            public boolean getUseSynchronousMode() {
-                return false;
-            }
-
-            @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
 
-                    sleep(100);
+                    sleep(300);
                     Log.d("TES-MOVIE-DETAIL", "4. AFTER SLEEP -> REVIEW");
                     String result = new String(responseBody);
                     JSONObject responseObject = new JSONObject(result);
@@ -208,6 +177,7 @@ public class MovieAsyncTaskService extends AsyncTask<MovieAsyncTaskService.Input
                         movieDetailModel.setReview(review);
                     }
                     //movieDetailInstance.postValue(movieDetailModel);
+                    onPostExecute(movieDetailModel);
                     Log.d("VIEW-MOVIE-DETAIL-REV", "TES AKHIR ");
                 } catch (Exception e) {
                     Log.d("TES-VIEW-MODEL-Except", Objects.requireNonNull(e.getMessage()));
@@ -220,34 +190,14 @@ public class MovieAsyncTaskService extends AsyncTask<MovieAsyncTaskService.Input
             }
         });
 
-        return movieDetailModel;
+
     }
 
-    @Override
-    protected void onPostExecute(MovieDetailModel movieDetailModel) {
-        super.onPostExecute(movieDetailModel);
+    private void onPostExecute(MovieDetailModel movieDetailModel) {
         Log.i("ASYN_TAG", "onPostExecute inside DemoAsynch class");
-        AsyncTaskCallback myListener = this.asyncTaskCallback.get();
+        AsyncHttpCallback myListener = this.asyncTaskCallback.get();
         if(myListener != null){
             myListener.onPostExecute(movieDetailModel);
-        }
-    }
-
-    class InputOption {
-        private MovieModel movieModel;
-        private String langId;
-
-        InputOption(MovieModel movieModel, String langId) {
-            this.movieModel = movieModel;
-            this.langId = langId;
-        }
-
-        MovieModel getMovieModel() {
-            return movieModel;
-        }
-
-        String getLangId() {
-            return langId;
         }
     }
 

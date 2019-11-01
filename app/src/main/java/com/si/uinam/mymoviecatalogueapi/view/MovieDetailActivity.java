@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -32,6 +33,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private ImageView imgPoster, imgCast1, imgCast2, imgCast3;
     private MovieDetailViewModel movieDetailViewModel;
     private ProgressBar progressBar;
+    private ScrollView lytContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         imgCast2 = findViewById(R.id.img_cast2);
         imgCast3 = findViewById(R.id.img_cast3);
 
+        lytContainer = findViewById(R.id.lyt_container);
+
         progressBar = findViewById(R.id.mDetailProgressBar);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setIndeterminate(true);
@@ -99,14 +103,17 @@ public class MovieDetailActivity extends AppCompatActivity {
     private void showLoading(Boolean state) {
         if (state) {
             progressBar.setVisibility(View.VISIBLE);
+            lytContainer.setVisibility(View.GONE);
         } else {
             progressBar.setVisibility(View.GONE);
+            lytContainer.setVisibility(View.VISIBLE);
         }
     }
 
     public void displayMovieDetail(MovieDetailModel movieDetailModel) {
         Log.d("TES-MOVIE-ID", "ID: "+ movieDetailModel.getId());
         MovieDetailModel.Cast castDefault = movieDetailModel.new Cast();
+        castDefault.setProfile_path("");
         MovieDetailModel.Crew crewDefault = movieDetailModel.new Crew();
         MovieDetailModel.Review review = movieDetailModel.getReview();
         ArrayList<MovieDetailModel.Cast> casts = movieDetailModel.getCasts();
@@ -114,35 +121,57 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         //Log.d("TES-MOVIE-CAST", "ID: "+ casts.toString());
         //Log.d("TES-MOVIE-CREW", "ID: "+ crews.toString());
+        MovieDetailModel.Cast cast1, cast2, cast3;
+        if(casts != null){
+            cast1 = casts.size() >= 0? casts.get(0) : castDefault;
+            cast2 = casts.size() >= 1? casts.get(1) : castDefault;
+            cast3 = casts.size() >= 2? casts.get(2) : castDefault;
+        } else {
+            cast1 = cast2 = cast3 = castDefault;
+        }
 
-        MovieDetailModel.Cast cast1 = casts.size() >= 0? casts.get(0) : castDefault;
-        MovieDetailModel.Cast cast2 = casts.size() >= 1? casts.get(1) : castDefault;
-        MovieDetailModel.Cast cast3 = casts.size() >= 2? casts.get(2) : castDefault;
-
-        MovieDetailModel.Crew crew1 = crews.size() >= 0? crews.get(0) : crewDefault;
-        MovieDetailModel.Crew crew2 = crews.size() >= 1? crews.get(1) : crewDefault;
-        MovieDetailModel.Crew crew3 = crews.size() >= 2? crews.get(2) : crewDefault;
-
+        MovieDetailModel.Crew crew1, crew2, crew3;
+        if(crews != null) {
+            crew1 = crews.size() >= 0? crews.get(0) : crewDefault;
+            crew2 = crews.size() >= 1? crews.get(1) : crewDefault;
+            crew3 = crews.size() >= 2? crews.get(2) : crewDefault;
+        } else {
+            crew1 = crew2 = crew3 = crewDefault;
+        }
         ArrayList<String> genresList = movieDetailModel.getGenres();
         String genre = "";
         for (String object: genresList) {
             genre = genre + " " + object;
         }
 
+        String IMG_BASE_URL = ApiHelper.getImgBaseUrl();
+        String IMG_POSTER_DEFAULT = ApiHelper.getImgPosterPlaceholder();
+        String IMG_CAST_DEFAULT = ApiHelper.getImgCastPlaceholder();
+        String urlPoster = movieDetailModel.getPoster_path().isEmpty()? IMG_POSTER_DEFAULT
+                : IMG_BASE_URL + movieDetailModel.getPoster_path();
         Glide.with(getBaseContext())
-                .load(movieDetailModel.getPoster_path())
+                .load(urlPoster)
                 .apply(new RequestOptions().override(160, 240))
                 .into(this.imgPoster);
+
+        String imgCast1 = cast1.getProfile_path().isEmpty()? IMG_CAST_DEFAULT
+                : IMG_BASE_URL + cast1.getProfile_path();
         Glide.with(getBaseContext())
-                .load(cast1.getProfile_path())
+                .load(imgCast1)
                 .apply(new RequestOptions().override(110, 165))
                 .into(this.imgCast1);
+
+        String imgCast2 = cast2.getProfile_path().isEmpty()? IMG_CAST_DEFAULT
+                : IMG_BASE_URL + cast2.getProfile_path();
         Glide.with(getBaseContext())
-                .load(cast2.getProfile_path())
+                .load(imgCast2)
                 .apply(new RequestOptions().override(110, 165))
                 .into(this.imgCast2);
+
+        String imgCast3 = cast3.getProfile_path().isEmpty()? IMG_CAST_DEFAULT
+                : IMG_BASE_URL + cast3.getProfile_path();
         Glide.with(getBaseContext())
-                .load(cast3.getProfile_path())
+                .load(imgCast3)
                 .apply(new RequestOptions().override(110, 165))
                 .into(this.imgCast3);
         txvTittle.setText(movieDetailModel.getTitle());

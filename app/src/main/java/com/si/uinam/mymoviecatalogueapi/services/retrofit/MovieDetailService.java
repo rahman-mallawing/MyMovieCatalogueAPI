@@ -18,9 +18,9 @@ public class MovieDetailService {
     private static String API_KEY = ApiHelper.getApiKey();
     private static String CREDIT_LIST_TYPE = ApiHelper.getCreditListType();
     private static String REVIEW_LIST_TYPE = ApiHelper.getReviewListType();
-    private MovieModel movieModel;
+
+    private MovieDetail movieDetail;private MovieModel movieModel;
     private String langId;
-    private MovieDetail movieDetail;
     MovieDetailInterface mdServ;
     private WeakReference<MovieDetailServiceCallback> movieDetailServiceCallback;
 
@@ -58,7 +58,9 @@ public class MovieDetailService {
         } else {
             MovieDetailServiceCallback myListener = this.movieDetailServiceCallback.get();
             if(myListener != null){
-                myListener.onPostExecute(null, null, null);
+                myListener.onPostExecute(
+                        new MovieDetailModel(movieModel, movieDetail, null, null)
+                );
             }
         }
     }
@@ -71,7 +73,9 @@ public class MovieDetailService {
         } else {
             MovieDetailServiceCallback myListener = this.movieDetailServiceCallback.get();
             if(myListener != null){
-                myListener.onPostExecute(movieDetail, movieCredit, null);
+                myListener.onPostExecute(
+                        new MovieDetailModel(movieModel, movieDetail, movieCredit, null)
+                );
             }
         }
     }
@@ -80,7 +84,9 @@ public class MovieDetailService {
         Log.i("ASYN_TAG", "onPreExecute inside DemoAsynch class");
         MovieDetailServiceCallback myListener = this.movieDetailServiceCallback.get();
         if(myListener != null){
-            myListener.onPostExecute(movieDetail, movieCredit, movieReview);
+            myListener.onPostExecute(
+                    new MovieDetailModel(movieModel, movieDetail, movieCredit, movieReview)
+            );
         }
     }
 

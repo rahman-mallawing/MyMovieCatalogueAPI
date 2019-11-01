@@ -1,5 +1,9 @@
 package com.si.uinam.mymoviecatalogueapi.model;
 
+import com.si.uinam.mymoviecatalogueapi.services.retrofit.MovieCredit;
+import com.si.uinam.mymoviecatalogueapi.services.retrofit.MovieDetail;
+import com.si.uinam.mymoviecatalogueapi.services.retrofit.MovieReview;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -14,6 +18,80 @@ public class MovieDetailModel extends MovieModel{
     private ArrayList<Cast> casts;
     private ArrayList<Crew> crews;
     private Review review;
+
+    public MovieDetailModel (MovieModel movieModel, MovieDetail movieDetail, MovieCredit movieCredit, MovieReview movieReview) {
+        this.setAdult(movieModel.isAdult());
+        this.setId(movieModel.getId());
+        this.setPopularity(movieModel.getPopularity());
+        this.setVote_count(movieModel.getVote_count());
+        this.setVideo(movieModel.isVideo());
+        this.setPoster_path(movieModel.getPoster_path());
+        this.setBackdrop_path(movieModel.getBackdrop_path());
+        this.setOriginal_language(movieModel.getOriginal_language());
+        this.setOriginal_title(movieModel.getOriginal_title());
+        this.setGenre_ids(movieModel.getGenre_ids());
+        this.setTitle(movieModel.getTitle());
+        this.setVote_average(movieModel.getVote_average());
+        this.setOverview(movieModel.getOverview());
+        this.setRelease_date(movieModel.getRelease_date());
+        if(movieDetail != null) {
+            this.setBudget(movieDetail.getBudget());
+            this.setHomepage(movieDetail.getHomepage());
+            this.setImdb_id(movieDetail.getImdb_id());
+            this.setStatus(movieDetail.getStatus());
+            this.setTagline(movieDetail.getTagline());
+        }
+        MovieDetailModel.Review movieDetailModelReview = this.new Review();
+        if(movieReview != null){
+            ArrayList<MovieReview.Review> mReviewArray = movieReview.getReviews();
+            if(mReviewArray != null && mReviewArray.size() > 0) {
+                MovieReview.Review rv = mReviewArray.get(0);
+                movieDetailModelReview.setContent(rv.getContent());
+                movieDetailModelReview.setAuthor(rv.getAuthor());
+            }
+        }
+        this.setReview(movieDetailModelReview);
+        ArrayList<String> gens = new ArrayList<>();
+        if(movieDetail != null){
+            ArrayList<MovieDetail.Genre> genreMovieDetailArray = movieDetail.getGenres();
+            for(MovieDetail.Genre gen : genreMovieDetailArray) {
+                gens.add(gen.getName());
+            }
+        }
+        this.setGenres(gens);
+        ArrayList<MovieDetailModel.Cast> castsMovieDetailModel = new ArrayList<>();
+        ArrayList<MovieDetailModel.Crew> crewsMovieDetailModel = new ArrayList<>();
+        if(movieCredit != null){
+            ArrayList<MovieCredit.Cast> castsMovieCredit = movieCredit.getCasts();
+            for(MovieCredit.Cast castCredit : castsMovieCredit) {
+                MovieDetailModel.Cast castDetail = this.new Cast();
+                castDetail.setCast_id(castCredit.getCast_id());
+                castDetail.setCharacter(castCredit.getCharacter());
+                castDetail.setCredit_id(castCredit.getCredit_id());
+                castDetail.setGender(castCredit.getGender());
+                castDetail.setId(castCredit.getId());
+                castDetail.setName(castCredit.getName());
+                castDetail.setOrder(castCredit.getOrder());
+                castDetail.setProfile_path(castCredit.getProfile_path());
+                castsMovieDetailModel.add(castDetail);
+            }
+            ArrayList<MovieCredit.Crew> crewsMovieCredit = movieCredit.getCrews();
+            for(MovieCredit.Crew crewCredit : crewsMovieCredit) {
+                MovieDetailModel.Crew crewDetail = this.new Crew();
+                crewDetail.setId(crewCredit.getId());
+                crewDetail.setCredit_id(crewCredit.getCredit_id());
+                crewDetail.setDepartment(crewCredit.getDepartment());
+                crewDetail.setGender(crewCredit.getGender());
+                crewDetail.setJob(crewCredit.getJob());
+                crewDetail.setName(crewCredit.getName());
+                crewDetail.setProfile_path(crewCredit.getProfile_path());
+                crewsMovieDetailModel.add(crewDetail);
+            }
+        }
+        this.setCasts(castsMovieDetailModel);
+        this.setCrews(crewsMovieDetailModel);
+
+    }
 
     public MovieDetailModel(MovieModel movieModel) {
         this.setAdult(movieModel.isAdult());
@@ -176,7 +254,7 @@ public class MovieDetailModel extends MovieModel{
         }
 
         public String getProfile_path() {
-            return "https://image.tmdb.org/t/p/w500" + profile_path;
+            return profile_path;
         }
 
         public void setProfile_path(String profile_path) {
@@ -243,7 +321,7 @@ public class MovieDetailModel extends MovieModel{
         }
 
         public String getProfile_path() {
-            return "https://image.tmdb.org/t/p/w500" + profile_path;
+            return profile_path;
         }
 
         public void setProfile_path(String profile_path) {

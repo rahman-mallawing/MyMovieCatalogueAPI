@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.si.uinam.mymoviecatalogueapi.R;
+import com.si.uinam.mymoviecatalogueapi.helper.ApiHelper;
 import com.si.uinam.mymoviecatalogueapi.model.MovieModel;
 
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         void bind(MovieModel movieModel){
 
             Glide.with(itemView.getContext())
-                    .load(movieModel.getPoster_path())
+                    .load(ApiHelper.getImgBaseUrl() + movieModel.getPoster_path())
                     .apply(new RequestOptions().override(100, 150))
                     .into(imgPoster);
             txvTitle.setText(movieModel.getTitle());
