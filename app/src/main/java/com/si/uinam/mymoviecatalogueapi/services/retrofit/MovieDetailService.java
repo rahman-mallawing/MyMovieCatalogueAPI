@@ -19,7 +19,8 @@ public class MovieDetailService {
     private static String CREDIT_LIST_TYPE = ApiHelper.getCreditListType();
     private static String REVIEW_LIST_TYPE = ApiHelper.getReviewListType();
 
-    private MovieDetail movieDetail;private MovieModel movieModel;
+    private MovieDetail movieDetail;
+    private MovieModel movieModel;
     private String langId;
     MovieDetailInterface mdServ;
     private WeakReference<MovieDetailServiceCallback> movieDetailServiceCallback;

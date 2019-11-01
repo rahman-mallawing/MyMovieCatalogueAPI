@@ -11,9 +11,9 @@
     <string name="english">Bahasa Inggris</string>
     <string name="change_language">Ganti Bahasa</string>
     <string name="movie_title_sample">Judul Movie Populer</string>
-    <string name="review">Review</string>
-    <string name="genre">GENRE</string>
-    <string name="overview">OVERVIEW</string>
+    <string name="review">Ulasan</string>
+    <string name="genre">Aliran</string>
+    <string name="overview">Ikhtisar</string>
     <string name="cast_desc_sample">Desc Sample 3</string>
     <string name="crew3_desc_sample">Crew Desc Sample 3</string>
     <string name="crew2_desc_sample">Desc Sample 3</string>
