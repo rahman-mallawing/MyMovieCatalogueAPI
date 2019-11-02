@@ -16,6 +16,6 @@ public interface TvShowDetailInterface {
 
     //url = /3/tv/47557/reviews?api_key=2f766223589e24c61b0aecdf89ec841d&language=en-US&page=1
     @GET("/3/tv/{id}/reviews")
-    Call<TvShowReview> getTvShowReview(@Path("id") int groupId, @Query("api_key") String apiKey, @Query("language") String language, @Query("page") String page);
+    Call<TvShowReview> getTvShowReview(@Path("id") int groupId, @Query("api_key") String apiKey, @Query("language") String language, @Query("page") int page);
 
 }

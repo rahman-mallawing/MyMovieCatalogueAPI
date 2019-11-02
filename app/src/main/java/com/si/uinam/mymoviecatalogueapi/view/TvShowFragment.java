@@ -90,7 +90,7 @@ public class TvShowFragment extends Fragment {
         rcvMovies.setAdapter(tvShowListAdapter);
         showLoading(true);
         Log.d("TES-VIEW-MODEL-TV-SHOW", "Inside onCreateView" );
-        tvShowViewModel.loadTvShow(getContext());
+        //tvShowViewModel.loadTvShow(getContext());
 
         return view;
     }
@@ -103,4 +103,9 @@ public class TvShowFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        tvShowViewModel.loadTvShow(getContext());
+    }
 }

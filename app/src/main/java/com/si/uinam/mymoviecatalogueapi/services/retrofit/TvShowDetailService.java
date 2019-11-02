@@ -41,11 +41,48 @@ public class TvShowDetailService {
         this.getTvShowDetail();
     }
 
-    private void onCallResponded(TvShowDetail tvShowDetail) {
-        Log.i("ASYN_TAG", "onPreExecute inside DemoAsynch class");
+    private void onTvShowDetailPostExecuted(TvShowDetail tvShowDetail) {
+        Log.i("ASYN_TAG", "onTvShowDetailPostExecuted inside DemoAsynch class");
+        if(tvShowDetail != null) {
+            Log.i("REVIEW-DETAIL", tvShowDetail.toString() );
+            this.getTvShowCredit(tvShowDetail);
+        } else {
+            TvShowDetailServiceCallback myListener = this.tvShowDetailServiceCallback.get();
+            if(myListener != null){
+                myListener.onPostExecute(new TvShowDetail());
+            }
+        }
+    }
+
+    private void onTvShowCreditPostExecuted(TvShowDetail tvShowDetail, TvShowCredit tvShowCredit) {
+        Log.i("ASYN_TAG", "onTvShowCreditPostExecuted inside DemoAsynch class");
+        if(tvShowDetail != null) {
+            tvShowDetail.setCasts(tvShowCredit.getCasts());
+            tvShowDetail.setCrews(tvShowCredit.getCrews());
+            Log.i("CREDIT-POST", tvShowDetail.toString() );
+            this.getTvShowReview(tvShowDetail);
+        } else {
+            TvShowDetailServiceCallback myListener = this.tvShowDetailServiceCallback.get();
+            if(myListener != null){
+                myListener.onPostExecute(new TvShowDetail());
+            }
+        }
+    }
+
+    private void onTvShowReviewPostExecuted(TvShowDetail tvShowDetail, TvShowReview tvShowReview) {
+        Log.i("ASYN_TAG", "onTvShowReviewPostExecuted inside DemoAsynch class");
         TvShowDetailServiceCallback myListener = this.tvShowDetailServiceCallback.get();
-        if(myListener != null){
-            myListener.onPostExecute(tvShowDetail);
+        Log.i("REVIEW-POST0", tvShowDetail.toString() );
+        if(tvShowDetail != null) {
+            tvShowDetail.setReviews(tvShowReview.getReviews());
+            if(myListener != null){
+                Log.i("REVIEW-POST1", tvShowDetail.toString() );
+                myListener.onPostExecute(tvShowDetail);
+            }
+        } else {
+            if(myListener != null){
+                myListener.onPostExecute(new TvShowDetail());
+            }
         }
     }
 
@@ -55,12 +92,46 @@ public class TvShowDetailService {
         call.enqueue(new Callback<TvShowDetail>() {
             @Override
             public void onResponse(Call<TvShowDetail> call, Response<TvShowDetail> response) {
-
+                Log.d("RETROFIT-TV-DETAIL", response.body().getName()+":getTvShowDetail");
+                onTvShowDetailPostExecuted(response.body());
             }
 
             @Override
             public void onFailure(Call<TvShowDetail> call, Throwable t) {
+                Log.d("RETROFIT-TEST-ERROR", t.getMessage());
+            }
+        });
+    }
 
+    private void getTvShowCredit(final TvShowDetail tvShowDetail) {
+        Call<TvShowCredit> call = tvShowServ.getTvShowCredit(tvShowModel.getId(), API_KEY, this.langId);
+        call.enqueue(new Callback<TvShowCredit>() {
+            @Override
+            public void onResponse(Call<TvShowCredit> call, Response<TvShowCredit> response) {
+                Log.d("RETROFIT-TEST-CREDIT", response.body().toString());
+                onTvShowCreditPostExecuted(tvShowDetail, response.body());
+            }
+
+            @Override
+            public void onFailure(Call<TvShowCredit> call, Throwable t) {
+                Log.d("RETROFIT-TEST-ERROR", t.getMessage());
+            }
+        });
+    }
+
+    private void getTvShowReview(final TvShowDetail tvShowDetail) {
+
+        Call<TvShowReview> call = tvShowServ.getTvShowReview(tvShowModel.getId(), API_KEY, this.langId, 1);
+        call.enqueue(new Callback<TvShowReview>() {
+            @Override
+            public void onResponse(Call<TvShowReview> call, Response<TvShowReview> response) {
+                Log.d("RETROFIT-TEST-REVIEW", response.body().toString());
+                onTvShowReviewPostExecuted(tvShowDetail, response.body());
+            }
+
+            @Override
+            public void onFailure(Call<TvShowReview> call, Throwable t) {
+                Log.d("RETROFIT-TEST-ERROR", t.getMessage());
             }
         });
     }

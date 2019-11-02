@@ -96,7 +96,7 @@ public class MovieFragment extends Fragment {
         movieListAdapter.notifyDataSetChanged();
         rcvMovies.setAdapter(movieListAdapter);
         showLoading(true);
-       movieViewModel.loadMovieList(getContext());
+       //movieViewModel.loadMovieList(getContext());
 
         return view;
     }
@@ -109,4 +109,9 @@ public class MovieFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        movieViewModel.loadMovieList(getContext());
+    }
 }

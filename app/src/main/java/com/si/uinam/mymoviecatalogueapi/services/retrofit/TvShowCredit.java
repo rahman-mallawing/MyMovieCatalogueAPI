@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 public class TvShowCredit {
 
+    public TvShowCredit() {
+    }
+
     public String toString() {
         StringBuilder result = new StringBuilder();
         String newLine = System.getProperty("line.separator");
@@ -51,7 +54,34 @@ public class TvShowCredit {
         this.crews = crews;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public ArrayList<Cast> getCasts() {
+        return casts;
+    }
+
+    public void setCasts(ArrayList<Cast> casts) {
+        this.casts = casts;
+    }
+
+    public ArrayList<Crew> getCrews() {
+        return crews;
+    }
+
+    public void setCrews(ArrayList<Crew> crews) {
+        this.crews = crews;
+    }
+
     public class Cast {
+
+        public Cast() {
+        }
 
         public String toString() {
             StringBuilder result = new StringBuilder();
@@ -174,6 +204,9 @@ public class TvShowCredit {
 
 
     public class Crew {
+
+        public Crew() {
+        }
 
         public String toString() {
             StringBuilder result = new StringBuilder();

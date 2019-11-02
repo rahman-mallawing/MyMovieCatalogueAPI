@@ -1,12 +1,16 @@
 package com.si.uinam.mymoviecatalogueapi.services.retrofit;
 
 import com.google.gson.annotations.SerializedName;
+import com.si.uinam.mymoviecatalogueapi.helper.ApiHelper;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class TvShowDetail {
+
+    public TvShowDetail() {
+    }
 
     public String toString() {
         StringBuilder result = new StringBuilder();
@@ -126,6 +130,52 @@ public class TvShowDetail {
         this.type = type;
         this.vote_average = vote_average;
         this.vote_count = vote_count;
+    }
+
+    public TvShowCredit.Cast getCast(int index) {
+        TvShowCredit.Cast cast;
+        if(this.casts == null || index >= this.casts.size()) {
+            cast = new TvShowCredit().new Cast();
+            cast.setProfile_path(ApiHelper.getImgPosterPlaceholder());
+            return cast;
+        }else{
+            cast = this.casts.get(index);
+            cast.setProfile_path(ApiHelper.getImgBaseUrl() + cast.getProfile_path());
+            return cast;
+        }
+    }
+
+    public TvShowCredit.Crew getCrew(int index) {
+        TvShowCredit.Crew crew;
+        if(this.crews == null || index >= this.crews.size()) {
+            crew = new TvShowCredit().new Crew();
+            crew.setProfile_path(ApiHelper.getImgPosterPlaceholder());
+            return crew;
+        }else{
+            crew = this.crews.get(index);
+            crew.setProfile_path(ApiHelper.getImgBaseUrl() + crew.getProfile_path());
+            return crew;
+        }
+    }
+
+    public TvShowReview.Review getReview(int index) {
+        TvShowReview.Review review;
+        if(this.reviews == null || index >= this.reviews.size()) {
+            review = new TvShowReview().new Review();
+            return review;
+        }else{
+            review = this.reviews.get(index);
+            return review;
+        }
+    }
+
+    public String getGenreName() {
+        if (this.genres == null) return "";
+        String gen = "";
+        for(TvShowDetail.Genre genre : this.genres) {
+            gen = gen + genre.getName() + " ";
+        }
+        return  gen;
     }
 
     public ArrayList<TvShowCredit.Cast> getCasts() {

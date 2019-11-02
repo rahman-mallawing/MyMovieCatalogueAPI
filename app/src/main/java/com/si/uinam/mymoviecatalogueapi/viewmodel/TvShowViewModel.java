@@ -38,7 +38,7 @@ public class TvShowViewModel extends ViewModel {
 
                 try {
                     ArrayList<TvShowModel> tvShowListModels = new ArrayList<>();
-                    sleep(100);
+                    sleep(5000);
                     Log.d("TES-VIEW-MODEL-TV-SHOW", "Trying Parsing");
                     String result = new String(responseBody);
                     JSONObject responseObject = new JSONObject(result);

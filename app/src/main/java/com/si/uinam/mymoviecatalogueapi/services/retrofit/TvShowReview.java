@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 public class TvShowReview {
 
+    public TvShowReview() {
+    }
+
     public String toString() {
         StringBuilder result = new StringBuilder();
         String newLine = System.getProperty("line.separator");
@@ -76,6 +79,9 @@ public class TvShowReview {
     }
 
     public class Review {
+
+        public Review() {
+        }
 
         public String toString() {
             StringBuilder result = new StringBuilder();
