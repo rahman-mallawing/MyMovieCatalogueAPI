@@ -1,6 +1,7 @@
 package com.si.uinam.mymoviecatalogueapi.view;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -21,6 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.si.uinam.mymoviecatalogueapi.R;
+import com.si.uinam.mymoviecatalogueapi.helper.ApiHelper;
+import com.si.uinam.mymoviecatalogueapi.helper.LocaleHelper;
 import com.si.uinam.mymoviecatalogueapi.model.MovieModel;
 import com.si.uinam.mymoviecatalogueapi.viewmodel.MovieViewModel;
 
@@ -29,7 +32,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovieFragment extends Fragment {
+public class MovieFragment extends Fragment implements FragmentLifecycle{
 
     private ProgressBar progressBar;
     private MovieListAdapter movieListAdapter;
@@ -38,9 +41,13 @@ public class MovieFragment extends Fragment {
 
     public MovieFragment() {
         // Required empty public constructor
+
+
+
     }
 
     public static MovieFragment newInstance() {
+        Log.d("FRAGMENT-CREATE", "onResume Movie");
         MovieFragment fragment = new MovieFragment();
         return fragment;
     }
@@ -50,20 +57,7 @@ public class MovieFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-        movieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
-
-        movieViewModel.getMovieCollection().observe(this, new Observer<ArrayList<MovieModel>>() {
-            @Override
-            public void onChanged(ArrayList<MovieModel> collection) {
-                Log.d("TES-VIEW-MODEL", "1212. Live collection adalah: " + collection.size());
-                //Log.d("TES-VIEW-MODEL", "1212. Live collection adalah: " + collection.get(0).getPoster_path());
-                if(collection != null){
-                    movieListAdapter.setMovieList(collection);
-                    Log.d("TES-VIEW-MODEL", "8. Inside observer setMovieList: " + collection.size());
-                    showLoading(false);
-                }
-            }
-        });
+        ///
 
 
 
@@ -105,13 +99,47 @@ public class MovieFragment extends Fragment {
         if (state) {
             progressBar.setVisibility(View.VISIBLE);
         } else {
-            progressBar.setVisibility(View.GONE);
+            //progressBar.setVisibility(View.GONE);
         }
     }
 
+
     @Override
-    public void onResume() {
-        super.onResume();
-        movieViewModel.loadMovieList(getContext());
+    public void onPauseFragment(Context context) {
+        Log.i("Movie-Pause", "onPauseFragment()");
+        //Toast.makeText(getActivity(), "onPauseFragment():" + "Movie-Pause", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onResumeFragment(Context context) {
+        Log.i("Movie-Resume", "onResumeFragment()");
+        //Toast.makeText(getActivity(), "onResumeFragment():" + "Movie-Resume", Toast.LENGTH_SHORT).show();
+        //movieViewModel.loadMovieList(getParentFragment().getContext());
+        Log.i("Movie-Pause", context.toString());
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        movieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
+
+        movieViewModel.getMovieCollection().observe(this, new Observer<ArrayList<MovieModel>>() {
+            @Override
+            public void onChanged(ArrayList<MovieModel> collection) {
+                Log.d("TES-VIEW-MODEL", "1212. Live collection adalah: " + collection.size());
+                //Log.d("TES-VIEW-MODEL", "1212. Live collection adalah: " + collection.get(0).getPoster_path());
+                if(collection != null){
+                    movieListAdapter.setMovieList(collection);
+                    Log.d("TES-VIEW-MODEL", "8. Inside observer setMovieList: " + collection.size());
+                    showLoading(false);
+                }
+            }
+        });
+        movieViewModel.loadMovieList(
+                ApiHelper.getLanguageId(LocaleHelper.getLocale(context))
+        );
+    }
+
+
+
 }

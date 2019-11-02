@@ -3,8 +3,8 @@ package com.si.uinam.mymoviecatalogueapi.viewmodel;
 
 import com.si.uinam.mymoviecatalogueapi.model.MovieDetailModel;
 import com.si.uinam.mymoviecatalogueapi.model.MovieModel;
-import com.si.uinam.mymoviecatalogueapi.services.asynchttp.AsyncHttpCallback;
-import com.si.uinam.mymoviecatalogueapi.services.asynchttp.MovieAsyncHttpService;
+import com.si.uinam.mymoviecatalogueapi.services.asynchttp.AsyncMovieDetailHttpCallback;
+import com.si.uinam.mymoviecatalogueapi.services.asynchttp.MovieDetailAsyncHttpService;
 import com.si.uinam.mymoviecatalogueapi.services.retrofit.MovieDetailService;
 import com.si.uinam.mymoviecatalogueapi.services.retrofit.MovieDetailServiceCallback;
 
@@ -37,7 +37,7 @@ public class MovieDetailViewModel extends ViewModel {
     }
 
     private void loadMovieDetailWithAsyncHttp(MovieModel movieModel, String languageId) {
-        MovieAsyncHttpService.create(new AsyncHttpCallback() {
+        MovieDetailAsyncHttpService.create(new AsyncMovieDetailHttpCallback() {
             @Override
             public void onPostExecute(MovieDetailModel movieDetailModel) {
                 movieDetailInstance.setValue(movieDetailModel);

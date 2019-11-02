@@ -23,6 +23,14 @@ public class ApiHelper {
     private static final String UPCOMING_LIST_TYPE = "upcoming";
     private static final String NOW_PLAYING_LIST_TYPE = "now_playing";
 
+    public static String getPopularTvShowListUrl(String languageId) {
+        return BASE_URL + "/3/tv/" + POPULAR_LIST_TYPE + "?api_key=" + API_KEY + "&language=" + languageId + "&page=1";
+    }
+
+    public static String getPopularMovieListUrl(String languageId) {
+        return BASE_URL + "/3/movie/" + POPULAR_LIST_TYPE + "?api_key=" + API_KEY + "&language=" + languageId + "&page=1";
+    }
+
     public static String getImgPosterPlaceholder() {
         return IMG_POSTER_PLACEHOLDER;
     }

@@ -1,5 +1,6 @@
 package com.si.uinam.mymoviecatalogueapi.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     private final int requestCode = 100;
     public static final String EXTRA_CURRENT_LOCALE_ID = "EXTRA_CURRENT_LOCALE_ID";
+    private final Context context = this;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +40,37 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        //this.context = this;
+        final SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            int currentPosition = 0;
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int newPosition) {
+
+                FragmentLifecycle fragmentToShow = (FragmentLifecycle)sectionsPagerAdapter.getItem(newPosition);
+                fragmentToShow.onResumeFragment(context);
+
+                FragmentLifecycle fragmentToHide = (FragmentLifecycle)sectionsPagerAdapter.getItem(currentPosition);
+                fragmentToHide.onPauseFragment(context);
+
+                currentPosition = newPosition;
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 

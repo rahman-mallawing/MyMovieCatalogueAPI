@@ -5,199 +5,124 @@ import android.util.Log;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.si.uinam.mymoviecatalogueapi.helper.ApiHelper;
-import com.si.uinam.mymoviecatalogueapi.model.MovieDetailModel;
 import com.si.uinam.mymoviecatalogueapi.model.MovieModel;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
+
 import static java.lang.Thread.sleep;
 
 public class MovieAsyncHttpService {
 
     private static String API_KEY = ApiHelper.getApiKey();
-    private static String CREDIT_LIST_TYPE = ApiHelper.getCreditListType();
-    private static String REVIEW_LIST_TYPE = ApiHelper.getReviewListType();
-    private WeakReference<AsyncHttpCallback> asyncTaskCallback;
-    private MovieModel movieModel;
+    private static String BASE_URL = ApiHelper.getBaseUrl();
+    private static String POPULAR_LIST_TYPE = ApiHelper.getPopularListType();
+    private static String NOW_PALYING_LIST_TYPE = ApiHelper.getNowPlayingListType();
+    private WeakReference<AsyncMovieHttpCallback> asyncTaskCallback;
     private String langId;
 
-    public static MovieAsyncHttpService create(AsyncHttpCallback asyncHttpCallback) {
-        return new MovieAsyncHttpService(asyncHttpCallback);
+    public static MovieAsyncHttpService create(AsyncMovieHttpCallback asyncMovieHttpCallback) {
+        return new MovieAsyncHttpService(asyncMovieHttpCallback);
     }
 
-    public MovieAsyncHttpService setInputOption(MovieModel mModel, String languageId) {
-        this.movieModel = mModel;
+    public MovieAsyncHttpService setInputOption(String languageId) {
         this.langId = languageId;
         return this;
     }
 
     public void executeService() {
-        this.execute(this.movieModel, this.langId);
+        this.execute(this.langId);
     }
 
-    private MovieAsyncHttpService(AsyncHttpCallback asyncHttpCallback) {
-        this.asyncTaskCallback = new WeakReference<>(asyncHttpCallback);
+    private MovieAsyncHttpService(AsyncMovieHttpCallback asyncMovieHttpCallback) {
+        this.asyncTaskCallback = new WeakReference<>(asyncMovieHttpCallback);
     }
 
-    private void execute(MovieModel movieModel, String languageId) {
+    private void execute(String languageId) {
 
-        //credit https://api.themoviedb.org/3/movie/475557/credits?api_key=2f766223589e24c61b0aecdf89ec841d
-        // review https://api.themoviedb.org/3/movie/475557/reviews?api_key=2f766223589e24c61b0aecdf89ec841d&language=en-US&page=1
-        // detail https://api.themoviedb.org/3/movie/558?api_key=2f766223589e24c61b0aecdf89ec841d&language=en-US
+        Log.d("TES-VIEW-MODEL", "2. Load Connect internet API");
         AsyncHttpClient client = new AsyncHttpClient();
+        final ArrayList<MovieModel> listItems = new ArrayList<>();
+        //2f766223589e24c61b0aecdf89ec841d&language=en-US&page=1
+        String url = ApiHelper.getPopularMovieListUrl(languageId);
 
-        final MovieDetailModel movieDetailModel = new MovieDetailModel(movieModel);
-        String urlDetail = "https://api.themoviedb.org/3/movie/" + movieModel.getId() + "?api_key=" + API_KEY + "&language=" + languageId;
-        String urlCredit = "https://api.themoviedb.org/3/movie/" + movieModel.getId() + "/" + CREDIT_LIST_TYPE + "?api_key=" + API_KEY;
-        String urlReview = "https://api.themoviedb.org/3/movie/" + movieModel.getId() + "/" + REVIEW_LIST_TYPE + "?api_key=" + API_KEY + "&language=" + languageId + "&page=1";
-
-        client.get(urlDetail, new AsyncHttpResponseHandler() {
-
+        client.get(url, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                Log.d("TES-VIEW-MODEL", "3. SUCCESS Connect internet API");
                 try {
+                    //ArrayList<MovieModel> listItems = new ArrayList<>();
 
-                    sleep(100);
-                    Log.d("TES-MOVIE-DETAIL", "4. AFTER SLEEP");
+                    sleep(5000);
+                    Log.d("TES-VIEW-MODEL", "4. AFTER SLEEP");
                     String result = new String(responseBody);
                     JSONObject responseObject = new JSONObject(result);
-                    movieDetailModel.setBudget(responseObject.getDouble("budget"));
-                    movieDetailModel.setHomepage(responseObject.getString("homepage"));
-                    movieDetailModel.setImdb_id(responseObject.getString("imdb_id"));
-                    movieDetailModel.setStatus(responseObject.getString("status"));
-                    movieDetailModel.setTagline(responseObject.getString("tagline"));
+                    JSONArray list = responseObject.getJSONArray("results");
+                    for (int i = 0; i < list.length(); i++) {
+                        JSONObject movieJson = list.getJSONObject(i);
+                        MovieModel movieModel = new MovieModel();
+                        movieModel.setPopularity(movieJson.getDouble("popularity"));
+                        movieModel.setVote_count(movieJson.getDouble("vote_count"));
+                        movieModel.setVideo(movieJson.getBoolean("video"));
+                        movieModel.setPoster_path(movieJson.getString("poster_path"));
+                        movieModel.setId(movieJson.getInt("id"));
+                        movieModel.setAdult(movieJson.getBoolean("adult"));
+                        movieModel.setBackdrop_path(movieJson.getString("backdrop_path"));
+                        movieModel.setOriginal_language(movieJson.getString("original_language"));
+                        movieModel.setOriginal_title(movieJson.getString("original_title"));
 
-                    ArrayList<String> listGenre = new ArrayList<>();
-                    JSONArray jsonArrayGenre = responseObject.getJSONArray("genres");
-                    if (jsonArrayGenre.length() > 0) {
-                        int len = jsonArrayGenre.length();
-                        for (int k=0;k<len;k++){
-                            listGenre.add(jsonArrayGenre.getJSONObject(k).getString("name"));
+                        ArrayList<Integer> listGenreId = new ArrayList<Integer>();
+                        JSONArray jsonArrayGenre = movieJson.getJSONArray("genre_ids");
+                        if (jsonArrayGenre != null && jsonArrayGenre.length() > 0) {
+                            int lenGenre = jsonArrayGenre.length();
+                            for (int l=0;l<lenGenre;l++){
+                                listGenreId.add(jsonArrayGenre.getInt(l));
+                            }
                         }
+                        movieModel.setGenre_ids(listGenreId);
+
+                        movieModel.setTitle(movieJson.getString("title"));
+                        Log.d("TES-VIEW-MODEL-TITLE", movieJson.getString("title"));
+                        movieModel.setVote_average(movieJson.getDouble("vote_average"));
+                        movieModel.setOverview(movieJson.getString("overview"));
+                        movieModel.setRelease_date(Date.valueOf(movieJson.getString("release_date")));
+                        listItems.add(movieModel);
                     }
-                    movieDetailModel.setGenres(listGenre);
-                    Log.d("TES-VIEW-MOVIE-DETAIL", "TES: "+responseObject.getString("tagline"));
+                    //Log.d("TES-VIEW-MODEL", "50. sebelum set or post: " + listItems.size());
+
+                    //movieCollection.postValue(listItems);
+
+                    onPostExecute(listItems);
+
+                    Log.d("TES-VIEW-MODEL", "5. Inside view model setMovieList: " + listItems.size());
+                    //Log.d("TES-VIEW-MODEL", "5a. Inside view model setMovieList: " + movieList.getValue().toString());
+                    Log.d("TES-VIEW-MODEL", "6. movieList.postValue");
                 } catch (Exception e) {
-                    Log.d("TES-VIEW-MODEL-Except", Objects.requireNonNull(e.getMessage()));
+                    Log.d("TES-VIEW-MODEL-Except", e.getMessage());
                 }
+
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.d("TES-VIEW-MODEL-onFail", Objects.requireNonNull(error.getMessage()));
-            }
-        });
-
-        //request credit
-
-        client.get(urlCredit, new AsyncHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try {
-                    sleep(200);
-                    Log.d("CREDIT-MOVIE-DETAIL", "4. AFTER SLEEP");
-                    ArrayList<MovieDetailModel.Cast> castArrayList = new ArrayList<>();
-                    String result = new String(responseBody);
-                    JSONObject responseObject = new JSONObject(result);
-                    JSONArray castList = responseObject.getJSONArray("cast");
-
-                    for (int i = 0; i < castList.length(); i++) {
-                        JSONObject castJson = castList.getJSONObject(i);
-                        MovieDetailModel.Cast cast = movieDetailModel.new Cast();
-                        cast.setCast_id(castJson.getInt("cast_id"));
-                        cast.setCharacter(castJson.getString("character"));
-                        cast.setCredit_id(castJson.getString("credit_id"));
-                        cast.setGender(castJson.getInt("gender"));
-                        cast.setId(castJson.getInt("id"));
-                        cast.setName(castJson.getString("name"));
-                        cast.setOrder(castJson.getInt("order"));
-                        cast.setProfile_path(castJson.getString("profile_path"));
-                        Log.d("TES-VIEW-MODEL-DETAIL", castJson.getString("name"));
-                        castArrayList.add(cast);
-                    }
-
-                    movieDetailModel.setCasts(castArrayList);
-                    // crew
-                    ArrayList<MovieDetailModel.Crew> crewArrayList = new ArrayList<>();
-                    JSONArray crewList = responseObject.getJSONArray("crew");
-                    for (int i = 0; i < crewList.length(); i++) {
-                        JSONObject crewJson = crewList.getJSONObject(i);
-                        MovieDetailModel.Crew crew = movieDetailModel.new Crew();
-                        crew.setCredit_id(crewJson.getString("credit_id"));
-                        crew.setDepartment(crewJson.getString("department"));
-                        crew.setGender(crewJson.getInt("gender"));
-                        crew.setId(crewJson.getInt("id"));
-                        crew.setJob(crewJson.getString("job"));
-                        crew.setName(crewJson.getString("name"));
-                        crew.setProfile_path(crewJson.getString("profile_path"));
-                        Log.d("TES-VIEW-MODEL-DETAIL", crewJson.getString("name"));
-                        crewArrayList.add(crew);
-                    }
-
-                    movieDetailModel.setCrews(crewArrayList);
-
-                } catch (Exception e) {
-                    Log.d("TES-VIEW-MODEL-Except", Objects.requireNonNull(e.getMessage()));
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.d("VIEW-MOVIE-DETAIL-Fail", Objects.requireNonNull(error.getMessage()));
-            }
-        });
-
-        //request review
-
-        client.get(urlReview, new AsyncHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try {
-
-                    sleep(300);
-                    Log.d("TES-MOVIE-DETAIL", "4. AFTER SLEEP -> REVIEW");
-                    String result = new String(responseBody);
-                    JSONObject responseObject = new JSONObject(result);
-                    JSONArray reviewArrayJson = responseObject.getJSONArray("results");
-
-                    if (reviewArrayJson.length() > 0) {
-                        MovieDetailModel.Review review = movieDetailModel.new Review();
-                        String author = reviewArrayJson.getJSONObject(0).getString("author");
-                        String content = reviewArrayJson.getJSONObject(0).getString("content");
-                        review.setAuthor(author);
-                        review.setContent(content);
-                        movieDetailModel.setReview(review);
-                    }
-                    //movieDetailInstance.postValue(movieDetailModel);
-                    onPostExecute(movieDetailModel);
-                    Log.d("VIEW-MOVIE-DETAIL-REV", "TES AKHIR ");
-                } catch (Exception e) {
-                    Log.d("TES-VIEW-MODEL-Except", Objects.requireNonNull(e.getMessage()));
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.d("VIEW-MOVIE-DETAIL-Fail", Objects.requireNonNull(error.getMessage()));
+                Log.d("TES-VIEW-MODEL-onFail", error.getMessage());
             }
         });
 
 
     }
 
-    private void onPostExecute(MovieDetailModel movieDetailModel) {
+    private void onPostExecute(ArrayList<MovieModel> movieModelArrayItems) {
         Log.i("ASYN_TAG", "onPostExecute inside DemoAsynch class");
-        AsyncHttpCallback myListener = this.asyncTaskCallback.get();
+        AsyncMovieHttpCallback myListener = this.asyncTaskCallback.get();
         if(myListener != null){
-            myListener.onPostExecute(movieDetailModel);
+            myListener.onPostExecute(movieModelArrayItems);
         }
     }
 

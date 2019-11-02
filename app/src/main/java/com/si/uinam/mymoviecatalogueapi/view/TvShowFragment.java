@@ -1,6 +1,7 @@
 package com.si.uinam.mymoviecatalogueapi.view;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -19,6 +20,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.si.uinam.mymoviecatalogueapi.R;
+import com.si.uinam.mymoviecatalogueapi.helper.ApiHelper;
+import com.si.uinam.mymoviecatalogueapi.helper.LocaleHelper;
 import com.si.uinam.mymoviecatalogueapi.model.TvShowModel;
 import com.si.uinam.mymoviecatalogueapi.viewmodel.TvShowViewModel;
 
@@ -27,7 +30,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TvShowFragment extends Fragment {
+public class TvShowFragment extends Fragment implements FragmentLifecycle{
 
     private ProgressBar progressBar;
     private TvShowListAdapter tvShowListAdapter;
@@ -90,7 +93,7 @@ public class TvShowFragment extends Fragment {
         rcvMovies.setAdapter(tvShowListAdapter);
         showLoading(true);
         Log.d("TES-VIEW-MODEL-TV-SHOW", "Inside onCreateView" );
-        //tvShowViewModel.loadTvShow(getContext());
+        tvShowViewModel.loadTvShow(ApiHelper.getLanguageId(LocaleHelper.getLocale(getContext())));
 
         return view;
     }
@@ -104,8 +107,14 @@ public class TvShowFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        tvShowViewModel.loadTvShow(getContext());
+    public void onPauseFragment(Context context) {
+        Log.i("TvShow-Pause", "onPauseFragment()");
+        //Toast.makeText(getActivity(), "onPauseFragment():" + "TvShow-Pause", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResumeFragment(Context context) {
+        Log.i("TvShow-Resume", "onResumeFragment()");
+        //Toast.makeText(getActivity(), "onResumeFragment():" + "TvShow-Resume", Toast.LENGTH_SHORT).show();
     }
 }
