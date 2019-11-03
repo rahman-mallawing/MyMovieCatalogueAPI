@@ -1,5 +1,6 @@
 package com.si.uinam.mymoviecatalogueapi.model;
 
+import com.si.uinam.mymoviecatalogueapi.helper.ApiHelper;
 import com.si.uinam.mymoviecatalogueapi.services.retrofit.MovieCredit;
 import com.si.uinam.mymoviecatalogueapi.services.retrofit.MovieDetail;
 import com.si.uinam.mymoviecatalogueapi.services.retrofit.MovieReview;
@@ -18,6 +19,64 @@ public class MovieDetailModel extends MovieModel{
     private ArrayList<Cast> casts;
     private ArrayList<Crew> crews;
     private Review review;
+
+    public Cast getCast(int index) {
+        Cast cast;
+        if(this.casts == null || index >= this.casts.size()) {
+            cast = new Cast();
+            cast.setCharacter("No data");
+            cast.setName("No data");
+            cast.setProfile_path(ApiHelper.getImgPosterPlaceholder());
+            return cast;
+        }else{
+            cast = this.casts.get(index);
+            cast.setProfile_path(ApiHelper.getImgBaseUrl() + cast.getProfile_path());
+            return cast;
+        }
+    }
+
+    public Crew getCrew(int index) {
+        Crew crew;
+        if(this.crews == null || index >= this.crews.size()) {
+            crew = new Crew();
+            crew.setName("No data");
+            crew.setJob("No data");
+            crew.setProfile_path(ApiHelper.getImgPosterPlaceholder());
+            return crew;
+        }else{
+            crew = this.crews.get(index);
+            //crew.setProfile_path(ApiHelper.getImgBaseUrl() + crew.getProfile_path());
+            return crew;
+        }
+    }
+
+    public String getPosterImgUrl() {
+        if(this.poster_path == null) {
+            return ApiHelper.getImgPosterPlaceholder();
+        }else{
+            return ApiHelper.getImgBaseUrl() + this.poster_path;
+        }
+    }
+
+    public Review getReviewHaldeNull() {
+        if(this.review == null) {
+            Review review = new Review();
+            review.setAuthor("No data");
+            review.setContent("No data");
+            return review;
+        }else{
+            return this.review;
+        }
+    }
+
+    public String getGenreName() {
+        if (this.genres == null) return "";
+        String gen = "";
+        for(String genre : this.genres) {
+            gen = gen + genre + " ";
+        }
+        return  gen;
+    }
 
     public MovieDetailModel (MovieModel movieModel, MovieDetail movieDetail, MovieCredit movieCredit, MovieReview movieReview) {
         this.setAdult(movieModel.isAdult());
@@ -138,9 +197,9 @@ public class MovieDetailModel extends MovieModel{
         this.review = review;
     }
 
-    public double getBudget() {
+    /*public double getBudget() {
         return budget;
-    }
+    }*/
 
     public void setBudget(double budget) {
         this.budget = budget;
@@ -154,33 +213,33 @@ public class MovieDetailModel extends MovieModel{
         this.genres = genres;
     }
 
-    public String getHomepage() {
+    /*public String getHomepage() {
         return homepage;
-    }
+    }*/
 
     public void setHomepage(String homepage) {
         this.homepage = homepage;
     }
 
-    public String getImdb_id() {
+    /*public String getImdb_id() {
         return imdb_id;
-    }
+    }*/
 
     public void setImdb_id(String imdb_id) {
         this.imdb_id = imdb_id;
     }
 
-    public String getStatus() {
+    /*public String getStatus() {
         return status;
-    }
+    }*/
 
     public void setStatus(String status) {
         this.status = status;
     }
 
-    public String getTagline() {
+    /*public String getTagline() {
         return tagline;
-    }
+    }*/
 
     public void setTagline(String tagline) {
         this.tagline = tagline;
@@ -197,9 +256,9 @@ public class MovieDetailModel extends MovieModel{
         private int order;
         private String profile_path;
 
-        public int getCast_id() {
+        /*public int getCast_id() {
             return cast_id;
-        }
+        }*/
 
         public void setCast_id(int cast_id) {
             this.cast_id = cast_id;
@@ -213,17 +272,17 @@ public class MovieDetailModel extends MovieModel{
             this.character = character;
         }
 
-        public String getCredit_id() {
+        /*public String getCredit_id() {
             return credit_id;
-        }
+        }*/
 
         public void setCredit_id(String credit_id) {
             this.credit_id = credit_id;
         }
 
-        public int getGender() {
+        /*public int getGender() {
             return gender;
-        }
+        }*/
 
         public void setGender(int gender) {
             this.gender = gender;
@@ -245,9 +304,9 @@ public class MovieDetailModel extends MovieModel{
             this.name = name;
         }
 
-        public int getOrder() {
+        /*public int getOrder() {
             return order;
-        }
+        }*/
 
         public void setOrder(int order) {
             this.order = order;
@@ -272,25 +331,25 @@ public class MovieDetailModel extends MovieModel{
         private String name;
         private String profile_path;
 
-        public String getCredit_id() {
+        /*public String getCredit_id() {
             return credit_id;
-        }
+        }*/
 
         public void setCredit_id(String credit_id) {
             this.credit_id = credit_id;
         }
 
-        public String getDepartment() {
+        /*public String getDepartment() {
             return department;
-        }
+        }*/
 
         public void setDepartment(String department) {
             this.department = department;
         }
 
-        public int getGender() {
+        /*public int getGender() {
             return gender;
-        }
+        }*/
 
         public void setGender(int gender) {
             this.gender = gender;
@@ -320,9 +379,9 @@ public class MovieDetailModel extends MovieModel{
             this.name = name;
         }
 
-        public String getProfile_path() {
+        /*public String getProfile_path() {
             return profile_path;
-        }
+        }*/
 
         public void setProfile_path(String profile_path) {
             this.profile_path = profile_path;

@@ -7,14 +7,16 @@
 
     <ProgressBar
         android:id="@+id/tvProgressBar"
-        style="?android:attr/progressBarStyle"
+        style="@android:style/Widget.ProgressBar.Inverse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:indeterminate="true"
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcv_movies"
+        android:id="@+id/rcv_tv_shows"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/item_row_tv_show" />

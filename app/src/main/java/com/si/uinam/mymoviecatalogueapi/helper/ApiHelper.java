@@ -1,13 +1,5 @@
 package com.si.uinam.mymoviecatalogueapi.helper;
 
-import com.si.uinam.mymoviecatalogueapi.model.MovieDetailModel;
-import com.si.uinam.mymoviecatalogueapi.model.MovieModel;
-import com.si.uinam.mymoviecatalogueapi.services.retrofit.MovieCredit;
-import com.si.uinam.mymoviecatalogueapi.services.retrofit.MovieDetail;
-import com.si.uinam.mymoviecatalogueapi.services.retrofit.MovieReview;
-
-import java.util.ArrayList;
-
 public class ApiHelper {
 
     private static final String BASE_URL = "https://api.themoviedb.org";
@@ -20,7 +12,7 @@ public class ApiHelper {
     private static final String REVIEW_LIST_TYPE = "reviews";
     private static final String CREDIT_LIST_TYPE = "credits";
     private static final String POPULAR_LIST_TYPE = "popular";
-    private static final String UPCOMING_LIST_TYPE = "upcoming";
+    //private static final String UPCOMING_LIST_TYPE = "upcoming";
     private static final String NOW_PLAYING_LIST_TYPE = "now_playing";
 
     public static String getPopularTvShowListUrl(String languageId) {
@@ -61,10 +53,6 @@ public class ApiHelper {
 
     public static String getPopularListType() {
         return POPULAR_LIST_TYPE;
-    }
-
-    public static String getUpcomingListType() {
-        return UPCOMING_LIST_TYPE;
     }
 
     public static String getNowPlayingListType() {

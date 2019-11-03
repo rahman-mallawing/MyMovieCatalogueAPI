@@ -4,6 +4,8 @@ package com.si.uinam.mymoviecatalogueapi.viewmodel;
 import com.si.uinam.mymoviecatalogueapi.model.MovieModel;
 import com.si.uinam.mymoviecatalogueapi.services.asynchttp.AsyncMovieHttpCallback;
 import com.si.uinam.mymoviecatalogueapi.services.asynchttp.MovieAsyncHttpService;
+import com.si.uinam.mymoviecatalogueapi.services.retrofit.MovieService;
+import com.si.uinam.mymoviecatalogueapi.services.retrofit.MovieServiceCallback;
 
 import java.util.ArrayList;
 
@@ -16,8 +18,21 @@ public class MovieViewModel extends ViewModel {
     private MutableLiveData<ArrayList<MovieModel>> movieCollection = new MutableLiveData<>();
 
     public void loadMovieList(String languageId){
-        this.getMovieListWithAsyncHttpService(languageId);
+        this.getMovieListWithRetrofitService(languageId);
+        // ATAU bisa juga menggunakan service AsyncHttp
+        //this.getMovieListWithAsyncHttpService(languageId);
+    }
 
+    private void getMovieListWithRetrofitService(String languageId) {
+        MovieService.create()
+                .setCallback(new MovieServiceCallback() {
+                    @Override
+                    public void onPostExecute(ArrayList<MovieModel> movieModelArrayList) {
+                        movieCollection.setValue(movieModelArrayList);
+                    }
+                })
+                .setInputOption(languageId)
+                .executeService();
     }
 
     private void getMovieListWithAsyncHttpService(String languageId) {

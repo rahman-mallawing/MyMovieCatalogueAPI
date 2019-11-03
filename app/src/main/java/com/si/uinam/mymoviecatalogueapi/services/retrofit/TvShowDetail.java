@@ -137,6 +137,8 @@ public class TvShowDetail {
         if(this.casts == null || index >= this.casts.size()) {
             cast = new TvShowCredit().new Cast();
             cast.setProfile_path(ApiHelper.getImgPosterPlaceholder());
+            cast.setName("No data");
+            cast.setCharacter("No data");
             return cast;
         }else{
             cast = this.casts.get(index);
@@ -149,6 +151,8 @@ public class TvShowDetail {
         TvShowCredit.Crew crew;
         if(this.crews == null || index >= this.crews.size()) {
             crew = new TvShowCredit().new Crew();
+            crew.setName("No data");
+            crew.setJob("No data");
             crew.setProfile_path(ApiHelper.getImgPosterPlaceholder());
             return crew;
         }else{
@@ -162,6 +166,8 @@ public class TvShowDetail {
         TvShowReview.Review review;
         if(this.reviews == null || index >= this.reviews.size()) {
             review = new TvShowReview().new Review();
+            review.setAuthor("No data");
+            review.setContent("No data");
             return review;
         }else{
             review = this.reviews.get(index);

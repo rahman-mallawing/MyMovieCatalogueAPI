@@ -29,10 +29,12 @@ import com.si.uinam.mymoviecatalogueapi.viewmodel.MovieViewModel;
 
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovieFragment extends Fragment implements FragmentLifecycle{
+public class MovieFragment extends Fragment {
 
     private ProgressBar progressBar;
     private MovieListAdapter movieListAdapter;
@@ -41,9 +43,6 @@ public class MovieFragment extends Fragment implements FragmentLifecycle{
 
     public MovieFragment() {
         // Required empty public constructor
-
-
-
     }
 
     public static MovieFragment newInstance() {
@@ -55,13 +54,26 @@ public class MovieFragment extends Fragment implements FragmentLifecycle{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //movieViewModel = ViewModelProviders.of(getActivity()).get(MovieViewModel.class);
+        movieViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(MovieViewModel.class);
+        movieViewModel.getMovieCollection().observe(this, new Observer<ArrayList<MovieModel>>() {
+            @Override
+            public void onChanged(ArrayList<MovieModel> collection) {
+                Log.d("TES-VIEW-MODEL", "1212. Live collection adalah: " + collection.size());
+                //Log.d("TES-VIEW-MODEL", "1212. Live collection adalah: " + collection.get(0).getPoster_path());
+                if(collection != null){
+                    movieListAdapter.setMovieList(collection);
+                    Log.d("TES-VIEW-MODEL", "8. Inside observer setMovieList: " + collection.size());
+                    showLoading(false);
+                }
+            }
+        });
 
 
-        ///
-
-
-
-
+        movieViewModel.loadMovieList(
+                ApiHelper.getLanguageId(LocaleHelper.getLocale(getContext()))
+        );
+        Log.d("TES-onCreate", "onCreateonCreateonCreateonCreate");
     }
 
     @Override
@@ -81,7 +93,7 @@ public class MovieFragment extends Fragment implements FragmentLifecycle{
         movieListAdapter.setItemClickCallback(new MovieListAdapter.OnItemClickCallback() {
             @Override
             public void onItemClicked(MovieModel movie) {
-                Toast.makeText(getContext(), "Kamu memilih: " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.choice) + movie.getTitle(), Toast.LENGTH_SHORT).show();
                 Intent detailIntent = new Intent(getActivity(), MovieDetailActivity.class);
                 detailIntent.putExtra(MovieDetailActivity.EXTRA_MOVIE, movie);
                 startActivity(detailIntent);
@@ -89,57 +101,44 @@ public class MovieFragment extends Fragment implements FragmentLifecycle{
         });
         movieListAdapter.notifyDataSetChanged();
         rcvMovies.setAdapter(movieListAdapter);
-        showLoading(true);
+
        //movieViewModel.loadMovieList(getContext());
 
+        showLoading(true);
         return view;
     }
 
     private void showLoading(Boolean state) {
+        if(progressBar == null) {
+            Log.d("TES-progressBar", "NULL NULL NULL");
+            return;
+        }
         if (state) {
             progressBar.setVisibility(View.VISIBLE);
+            rcvMovies.setVisibility(View.GONE);
         } else {
-            //progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+            rcvMovies.setVisibility(View.VISIBLE);
         }
     }
 
-
     @Override
-    public void onPauseFragment(Context context) {
-        Log.i("Movie-Pause", "onPauseFragment()");
-        //Toast.makeText(getActivity(), "onPauseFragment():" + "Movie-Pause", Toast.LENGTH_SHORT).show();
-    }
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if(menuVisible){
 
-    @Override
-    public void onResumeFragment(Context context) {
-        Log.i("Movie-Resume", "onResumeFragment()");
-        //Toast.makeText(getActivity(), "onResumeFragment():" + "Movie-Resume", Toast.LENGTH_SHORT).show();
-        //movieViewModel.loadMovieList(getParentFragment().getContext());
-        Log.i("Movie-Pause", context.toString());
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        movieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
-
-        movieViewModel.getMovieCollection().observe(this, new Observer<ArrayList<MovieModel>>() {
-            @Override
-            public void onChanged(ArrayList<MovieModel> collection) {
-                Log.d("TES-VIEW-MODEL", "1212. Live collection adalah: " + collection.size());
-                //Log.d("TES-VIEW-MODEL", "1212. Live collection adalah: " + collection.get(0).getPoster_path());
-                if(collection != null){
-                    movieListAdapter.setMovieList(collection);
-                    Log.d("TES-VIEW-MODEL", "8. Inside observer setMovieList: " + collection.size());
-                    showLoading(false);
-                }
+            if(movieViewModel == null) {
+                Log.d("TES-movieViewModel", "NULL NULL NULL");
+                return;
             }
-        });
-        movieViewModel.loadMovieList(
-                ApiHelper.getLanguageId(LocaleHelper.getLocale(context))
-        );
-    }
+            showLoading(true);
+            movieViewModel.loadMovieList(
+                    ApiHelper.getLanguageId(LocaleHelper.getLocale(getContext()))
+            );
+            Log.d("TES-setMenuVisibility", "setMenuVisibilitysetMenuVisibility");
+        }
 
+    }
 
 
 }

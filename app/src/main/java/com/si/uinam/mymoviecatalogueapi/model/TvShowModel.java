@@ -3,22 +3,47 @@ package com.si.uinam.mymoviecatalogueapi.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.Date;
 
 public class TvShowModel implements Parcelable {
+    @SerializedName("popularity")
     protected double popularity;
+
+    @SerializedName("vote_count")
     protected double vote_count;
+
+    @SerializedName("poster_path")
     protected String poster_path;
+
+    @SerializedName("id")
     protected int id;
+
+    @SerializedName("backdrop_path")
     protected String backdrop_path;
+
+    @SerializedName("original_language")
     protected String original_language;
+
     protected ArrayList<String> origin_country;
+
+    @SerializedName("original_name")
     protected String original_name;
+
     protected ArrayList<Integer> genre_ids;
+
+    @SerializedName("name")
     protected String name;
+
+    @SerializedName("vote_average")
     protected double vote_average;
+
+    @SerializedName("overview")
     protected String overview;
+
+    @SerializedName("first_air_date")
     protected Date first_air_date;
 
     public ArrayList<String> getOrigin_country() {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -30,11 +31,11 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TvShowFragment extends Fragment implements FragmentLifecycle{
+public class TvShowFragment extends Fragment  {
 
     private ProgressBar progressBar;
     private TvShowListAdapter tvShowListAdapter;
-    private RecyclerView rcvMovies;
+    private RecyclerView rcvTvShows;
     private TvShowViewModel tvShowViewModel;
 
 
@@ -47,10 +48,10 @@ public class TvShowFragment extends Fragment implements FragmentLifecycle{
         return fragment;
     }
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         tvShowViewModel = ViewModelProviders.of(this).get(TvShowViewModel.class);
 
         tvShowViewModel.getTvShowCollection().observe(this, new Observer<ArrayList<TvShowModel>>() {
@@ -65,6 +66,7 @@ public class TvShowFragment extends Fragment implements FragmentLifecycle{
                 }
             }
         });
+        tvShowViewModel.loadTvShow(ApiHelper.getLanguageId(LocaleHelper.getLocale(getContext())));
 
     }
 
@@ -75,46 +77,54 @@ public class TvShowFragment extends Fragment implements FragmentLifecycle{
         View view = inflater.inflate(R.layout.fragment_tv_show, container, false);
 
         progressBar = view.findViewById(R.id.tvProgressBar);
-        rcvMovies = view.findViewById(R.id.rcv_movies);
+        rcvTvShows = view.findViewById(R.id.rcv_tv_shows);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setIndeterminate(true);
-        rcvMovies.setLayoutManager(new LinearLayoutManager(getContext()));
+        rcvTvShows.setLayoutManager(new LinearLayoutManager(getContext()));
         tvShowListAdapter = new TvShowListAdapter();
         tvShowListAdapter.setItemClickCallback(new TvShowListAdapter.OnItemClickCallback() {
             @Override
             public void onItemClicked(TvShowModel tvShow) {
-                Toast.makeText(getContext(), "Kamu memilih: " + tvShow.getName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.choice) + tvShow.getName(), Toast.LENGTH_SHORT).show();
                 Intent detailIntent = new Intent(getActivity(), TvShowDetailActivity.class);
                 detailIntent.putExtra(TvShowDetailActivity.EXTRA_TV_SHOW, tvShow);
                 startActivity(detailIntent);
             }
         });
         tvShowListAdapter.notifyDataSetChanged();
-        rcvMovies.setAdapter(tvShowListAdapter);
-        showLoading(true);
-        Log.d("TES-VIEW-MODEL-TV-SHOW", "Inside onCreateView" );
-        tvShowViewModel.loadTvShow(ApiHelper.getLanguageId(LocaleHelper.getLocale(getContext())));
+        rcvTvShows.setAdapter(tvShowListAdapter);
 
+        Log.d("TES-VIEW-MODEL-TV-SHOW", "Inside onCreateView" );
+        //tvShowViewModel.loadTvShow(ApiHelper.getLanguageId(LocaleHelper.getLocale(getContext())));
+        showLoading(true);
         return view;
     }
 
     private void showLoading(Boolean state) {
         if (state) {
             progressBar.setVisibility(View.VISIBLE);
+            rcvTvShows.setVisibility(View.GONE);
         } else {
             progressBar.setVisibility(View.GONE);
+            rcvTvShows.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
-    public void onPauseFragment(Context context) {
-        Log.i("TvShow-Pause", "onPauseFragment()");
-        //Toast.makeText(getActivity(), "onPauseFragment():" + "TvShow-Pause", Toast.LENGTH_SHORT).show();
-    }
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if(menuVisible){
 
-    @Override
-    public void onResumeFragment(Context context) {
-        Log.i("TvShow-Resume", "onResumeFragment()");
-        //Toast.makeText(getActivity(), "onResumeFragment():" + "TvShow-Resume", Toast.LENGTH_SHORT).show();
+            if(tvShowViewModel == null) {
+                Log.d("TES-tvShowViewModel", "NULL NULL NULL");
+                return;
+            }
+            showLoading(true);
+            tvShowViewModel.loadTvShow(
+                    ApiHelper.getLanguageId(LocaleHelper.getLocale(getContext()))
+            );
+            Log.d("TES-tvShowViewModel", "setMenuVisibilitysetMenuVisibility");
+        }
+
     }
 }

@@ -19,4 +19,5 @@
     <string name="crew2_desc_sample">Desc Sample 3</string>
     <string name="user_score">User score</string>
     <string name="poster_text_sample">poster_text_sample</string>
+    <string name="choice">You choose:</string>
 </resources>
