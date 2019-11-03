@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModel;
 public class TvShowViewModel extends ViewModel {
 
     private MutableLiveData<ArrayList<TvShowModel>> tvShowCollection = new MutableLiveData<>();
+    private MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     public void loadTvShow(String languageId){
         this.getTvShowListWithRetrofitService(languageId);
@@ -28,6 +29,11 @@ public class TvShowViewModel extends ViewModel {
                     @Override
                     public void onPostExecute(ArrayList<TvShowModel> tvShowModelArrayList) {
                         tvShowCollection.setValue(tvShowModelArrayList);
+                    }
+
+                    @Override
+                    public void onFailure(String err) {
+                        errorMessage.setValue(err);
                     }
                 })
                 .setInputOption(languageId)
@@ -45,6 +51,10 @@ public class TvShowViewModel extends ViewModel {
 
     public LiveData<ArrayList<TvShowModel>> getTvShowCollection() {
         return tvShowCollection;
+    }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
     }
 
 }

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -85,6 +88,20 @@ public class TvShowDetailActivity extends AppCompatActivity {
             public void onChanged(TvShowDetail tvShowDetail) {
                 Log.d("TvSHOW-Activity", tvShowDetail.toString());
                 displayTvShowDetail(tvShowDetail);
+                showLoading(false);
+            }
+        });
+
+        tvShowDetailViewModel.getErrorMessage().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                String msg = "Error: " + s;
+                Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+                View vi = toast.getView();
+                vi.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                TextView text = vi.findViewById(android.R.id.message);
+                text.setTextColor(Color.WHITE);
+                toast.show();
                 showLoading(false);
             }
         });

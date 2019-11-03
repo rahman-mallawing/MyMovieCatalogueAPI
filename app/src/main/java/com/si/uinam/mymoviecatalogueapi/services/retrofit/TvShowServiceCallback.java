@@ -6,4 +6,5 @@ import java.util.ArrayList;
 
 public interface TvShowServiceCallback {
     void onPostExecute(ArrayList<TvShowModel> tvShowModelArrayList);
+    void onFailure(String err);
 }

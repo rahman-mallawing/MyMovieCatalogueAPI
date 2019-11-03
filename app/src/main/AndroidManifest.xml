@@ -9,11 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.TvShowDetailActivity"></activity>
-        <activity android:name=".view.MovieDetailActivity" />
-        <activity android:name=".view.SettingActivity" />
+        <activity android:name=".view.TvShowDetailActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".view.MovieDetailActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".view.SettingActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
             android:name=".view.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

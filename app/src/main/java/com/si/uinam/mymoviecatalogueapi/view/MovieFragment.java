@@ -3,6 +3,8 @@ package com.si.uinam.mymoviecatalogueapi.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.si.uinam.mymoviecatalogueapi.R;
@@ -59,16 +62,26 @@ public class MovieFragment extends Fragment {
         movieViewModel.getMovieCollection().observe(this, new Observer<ArrayList<MovieModel>>() {
             @Override
             public void onChanged(ArrayList<MovieModel> collection) {
-                Log.d("TES-VIEW-MODEL", "1212. Live collection adalah: " + collection.size());
-                //Log.d("TES-VIEW-MODEL", "1212. Live collection adalah: " + collection.get(0).getPoster_path());
                 if(collection != null){
                     movieListAdapter.setMovieList(collection);
-                    Log.d("TES-VIEW-MODEL", "8. Inside observer setMovieList: " + collection.size());
                     showLoading(false);
                 }
             }
         });
 
+        movieViewModel.getErrorMessage().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                String msg = "Error: " + s;
+                Toast toast = Toast.makeText(getContext(), msg, Toast.LENGTH_LONG);
+                View vi = toast.getView();
+                vi.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                TextView text = vi.findViewById(android.R.id.message);
+                text.setTextColor(Color.WHITE);
+                toast.show();
+                showLoading(false);
+            }
+        });
 
         movieViewModel.loadMovieList(
                 ApiHelper.getLanguageId(LocaleHelper.getLocale(getContext()))

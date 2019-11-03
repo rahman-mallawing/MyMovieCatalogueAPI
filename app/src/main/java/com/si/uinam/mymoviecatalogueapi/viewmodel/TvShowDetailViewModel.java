@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModel;
 public class TvShowDetailViewModel extends ViewModel {
 
     private MutableLiveData<TvShowDetail> tvShowDetailInstance = new MutableLiveData<>();
+    private MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     public void loadTvShowDetail(TvShowModel tvShowModel, String languageId) {
 
@@ -32,6 +33,15 @@ public class TvShowDetailViewModel extends ViewModel {
                 Log.d("VIEW-MODEL", tvShowDetailIns.toString());
                 tvShowDetailInstance.setValue(tvShowDetailIns);
             }
+
+            @Override
+            public void onFailure(String err) {
+                errorMessage.setValue(err);
+            }
         }).setInputOption(tvShowModel, languageId).executeService();
+    }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
     }
 }

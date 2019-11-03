@@ -99,6 +99,10 @@ public class TvShowDetailService {
             @Override
             public void onFailure(Call<TvShowDetail> call, Throwable t) {
                 Log.d("RETROFIT-TEST-ERROR", t.getMessage());
+                TvShowDetailServiceCallback myListener = tvShowDetailServiceCallback.get();
+                if(myListener != null){
+                    myListener.onFailure(t.getMessage());
+                }
             }
         });
     }
@@ -115,6 +119,10 @@ public class TvShowDetailService {
             @Override
             public void onFailure(Call<TvShowCredit> call, Throwable t) {
                 Log.d("RETROFIT-TEST-ERROR", t.getMessage());
+                TvShowDetailServiceCallback myListener = tvShowDetailServiceCallback.get();
+                if(myListener != null){
+                    myListener.onFailure(t.getMessage());
+                }
             }
         });
     }
@@ -132,6 +140,10 @@ public class TvShowDetailService {
             @Override
             public void onFailure(Call<TvShowReview> call, Throwable t) {
                 Log.d("RETROFIT-TEST-ERROR", t.getMessage());
+                TvShowDetailServiceCallback myListener = tvShowDetailServiceCallback.get();
+                if(myListener != null){
+                    myListener.onFailure(t.getMessage());
+                }
             }
         });
     }

@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModel;
 public class MovieViewModel extends ViewModel {
 
     private MutableLiveData<ArrayList<MovieModel>> movieCollection = new MutableLiveData<>();
+    private MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     public void loadMovieList(String languageId){
         this.getMovieListWithRetrofitService(languageId);
@@ -29,6 +30,11 @@ public class MovieViewModel extends ViewModel {
                     @Override
                     public void onPostExecute(ArrayList<MovieModel> movieModelArrayList) {
                         movieCollection.setValue(movieModelArrayList);
+                    }
+
+                    @Override
+                    public void onFailure(String err) {
+                        errorMessage.setValue(err);
                     }
                 })
                 .setInputOption(languageId)
@@ -46,5 +52,9 @@ public class MovieViewModel extends ViewModel {
 
     public LiveData<ArrayList<MovieModel>> getMovieCollection() {
         return movieCollection;
+    }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
     }
 }

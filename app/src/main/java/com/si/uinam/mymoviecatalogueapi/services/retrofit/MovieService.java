@@ -65,6 +65,10 @@ public class MovieService {
             @Override
             public void onFailure(Call<Movie> call, Throwable t) {
                 Log.d("RETROFIT-TEST-ERROR", t.getMessage());
+                MovieServiceCallback myListener = movieServiceCallbackWeakReference.get();
+                if(myListener != null){
+                    myListener.onFailure(t.getMessage());
+                }
             }
         });
     }

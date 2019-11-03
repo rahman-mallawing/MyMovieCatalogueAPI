@@ -6,4 +6,5 @@ import java.util.ArrayList;
 
 public interface MovieServiceCallback {
     void onPostExecute(ArrayList<MovieModel> movieModelArrayList);
+    void onFailure(String err);
 }

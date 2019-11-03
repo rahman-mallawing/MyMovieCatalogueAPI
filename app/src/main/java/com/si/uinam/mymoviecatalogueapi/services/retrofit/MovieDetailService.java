@@ -103,6 +103,10 @@ public class MovieDetailService {
             @Override
             public void onFailure(Call<MovieDetail> call, Throwable t) {
                 Log.d("RETROFIT-TEST-ERROR", t.getMessage());
+                MovieDetailServiceCallback myListener = movieDetailServiceCallback.get();
+                if(myListener != null){
+                    myListener.onFailure(t.getMessage());
+                }
             }
         });
     }
@@ -118,7 +122,10 @@ public class MovieDetailService {
 
             @Override
             public void onFailure(Call<MovieCredit> call, Throwable t) {
-
+                MovieDetailServiceCallback myListener = movieDetailServiceCallback.get();
+                if(myListener != null){
+                    myListener.onFailure(t.getMessage());
+                }
             }
         });
     }
@@ -134,7 +141,11 @@ public class MovieDetailService {
 
             @Override
             public void onFailure(Call<MovieReview> call, Throwable t) {
-
+                String message = t.getMessage();
+                MovieDetailServiceCallback myListener = movieDetailServiceCallback.get();
+                if(myListener != null){
+                    myListener.onFailure(t.getMessage());
+                }
             }
         });
     }

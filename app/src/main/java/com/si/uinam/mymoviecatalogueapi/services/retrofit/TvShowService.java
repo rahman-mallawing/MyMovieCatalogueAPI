@@ -65,6 +65,10 @@ public class TvShowService {
             @Override
             public void onFailure(Call<TvShow> call, Throwable t) {
                 Log.d("RETROFIT-TEST-ERROR", t.getMessage());
+                TvShowServiceCallback myListener = tvShowServiceCallbackWeakReference.get();
+                if(myListener != null){
+                    myListener.onFailure(t.getMessage());
+                }
             }
         });
     }
